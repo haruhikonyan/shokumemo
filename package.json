@@ -1,15 +1,17 @@
 {
-  "name": "app",
+  "name": "shokumemo",
   "private": true,
   "dependencies": {
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.15.0",
+    "@popperjs/core": "^2.10.1",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.4.2",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
+    "bootstrap": "^5.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react_ujs": "^2.6.1",
