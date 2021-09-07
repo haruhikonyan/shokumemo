@@ -1,0 +1,353 @@
+# The behavior of RuboCop can be controlled via the .rubocop.yml
+# configuration file. It makes it possible to enable/disable
+# certain cops (checks) and to alter their behavior if they accept
+# any parameters. The file can be placed either in your home
+# directory or in some project directory.
+#
+# RuboCop will start looking for the configuration file in the directory
+# where the inspected file is and continue its way up to the root directory.
+#
+# See https://docs.rubocop.org/rubocop/configuration
+
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-rails
+
+AllCops:
+  TargetRubyVersion: 3.0
+  Exclude:
+    - .git/**/*
+    - bin/**/*
+    - config/**/*
+    - db/**/*
+    - node_modules/**/*
+    - tmp/**/*
+    - vendor/**/*
+    - config.ru
+    - Rakefile
+  NewCops: enable
+
+Rails:
+  Enabled: true
+
+##############################################################################
+# Bundler
+##############################################################################
+
+Bundler/OrderedGems:
+  TreatCommentsAsGroupSeparators: false
+  Exclude:
+    - 'Gemfile'
+
+##############################################################################
+# Layout
+##############################################################################
+
+# Allow not to align the parameters of a method call if they span more than one line.
+Layout/ParameterAlignment:
+  Enabled: false
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/HashAlignment:
+  Exclude:
+    - lib/tasks/annotate.rake
+
+Layout/LineLength:
+  Enabled: false
+
+# Allow any indent style because it's not easy to configure everyone's text editor.
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
+# Prefer `foo {}` to `foo{}`.
+Layout/SpaceBeforeBlockBraces:
+  EnforcedStyleForEmptyBraces: space
+
+Layout/SpaceInLambdaLiteral:
+  EnforcedStyle: require_space
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+
+Layout/SpaceInsideArrayPercentLiteral:
+  Enabled: false
+
+##############################################################################
+# Lint
+##############################################################################
+
+# Allow ambiguous block association often found in spec such as `expect { ... }.to change { ... }`.
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - spec/**/*
+
+Lint/EmptyWhen:
+  Enabled: false
+
+# Allow `rubocop:disable` directive that isn't followed by a matching `rubocop:enable` directive.
+# Rationale: sometimes we want to disable a cop at the top of a file and don't want to bother with re-enabling it at the bottom.
+Lint/MissingCopEnableDirective:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
+
+# Deny redundant access modifiers.
+Lint/UselessAccessModifier:
+  ContextCreatingMethods:
+    - concerning
+  MethodCreatingMethods:
+    - delegate
+
+##############################################################################
+# Metrics
+##############################################################################
+
+Metrics/AbcSize:
+  Max: 50
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+Metrics/MethodLength:
+  Max: 50
+
+Metrics/ModuleLength:
+  Max: 150
+  Exclude:
+    - spec/**/*
+
+Metrics/PerceivedComplexity:
+  Max: 15
+
+# Allow many keyword args.
+Metrics/ParameterLists:
+  Max: 5
+  CountKeywordArgs: false
+
+##############################################################################
+# Naming
+##############################################################################
+
+# Allow any heredoc delimiters. By default this cop would disallow `END` and `/EO[A-Z]/`.
+#
+# Rationale:
+#     - `END` and `EOS` are well-established convention.
+#     - It's not easy to enforce developers to use meaningful, content-aware delimiters such as `HTML` and `SQL`.
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+
+# Disallow is_xxx and have_xxx method name, while allow has_xxx.
+Naming/PredicateName:
+  ForbiddenPrefixes:
+    - is_
+    - have_
+
+# Allow `def foo; @different_name ||= Foo.new; end`.
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+# Disallow non-snake-case param name.
+Naming/MethodParameterName:
+  # Allow short param names because sometimes they are reasonable.
+  # (For example: `a` for anchor element and `n` for number)
+  MinNameLength: 1 # default: 3
+
+##############################################################################
+# Rails
+##############################################################################
+
+# Allow ActiveRecord's aliased methods (e.g. `#update` vs. `#update_attributes`)
+# because it's not worth it to remember which is the enforced one.
+Rails/ActiveRecordAliases:
+  Enabled: false
+
+Rails/Delegate:
+  Exclude:
+    - spec/**/*
+
+# Silence warnings on Non-Rails' #find_by_xxx.
+Rails/DynamicFindBy:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+
+# Allow both has_many :through and has_and_belongs_to_many.
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+# Allow both numeric and symbolic status codes.
+Rails/HttpStatus:
+  Enabled: false
+
+Rails/Output:
+  Exclude:
+    - lib/generators/**/*
+
+Rails/RakeEnvironment:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - production
+    - test
+
+##############################################################################
+# Style
+##############################################################################
+
+# Allow and/or.
+Style/AndOr:
+  Enabled: false
+
+# Allow non-ASCII symbols in comments.
+Style/AsciiComments:
+  Enabled: false
+
+# Allow use of {...} for multi-line blocks.
+Style/BlockDelimiters:
+  Enabled: false
+
+# Allow compact module/class definitions.
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+# Allow mixed use of equivalent collection methods such as `map` and `collect`.
+Style/CollectionMethods:
+  Enabled: false
+
+# Allow undocumented classes and non-namespace modules.
+Style/Documentation:
+  Enabled: false
+
+# Allow double negation (!!).
+Style/DoubleNegation:
+  Enabled: false
+
+# Allow empty `case` condition.
+Style/EmptyCaseCondition:
+  Enabled: false
+
+Style/EmptyElse:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+# Allow use of `%{foo}` in literal strings.
+#
+# This cop is meant to enforce certain style of the first argument to `Kernel.format`;
+# by default it prefers `format('%<foo>s', foo: 'Foo')` to `format('%{foo}', foo: 'Foo')` and `foo('%s', 'foo')`.
+#
+# However, it complains about any use of `%{foo}` in literal strings, even if the strings are not argument to `Kernel.format`.
+# This behavior is only annoying because we use few `Kernel.format`s while have many `%{foo}`s in article templates.
+Style/FormatStringToken:
+  Enabled: false
+
+# Allow wrapping a code inside a conditional expression.
+Style/GuardClause:
+  Enabled: false
+
+# Allow if/else statements even when they could be written as modifiers.
+Style/IfUnlessModifier:
+  Enabled: false
+
+# Prefer `-> { }` to `lambda { }` for both single-line and multi-line lambdas.
+Style/Lambda:
+  EnforcedStyle: literal
+
+# Allow condition at the end of iteration.
+Style/Next:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+# Prefer numeric comaprison (`foo > 0`, `foo == 0`) to numeric predicate (`foo.positive?`, `foo.zero?`).
+#
+# Rationale:
+#     - Comparison is always shorter than predicate.
+#     - Predicate is specific to comparison with 0, which results visual incosistency.
+#       Consider `case when foo > 5 ... when foo > 0 ... end` vs. `case when foo > 5 ... when foo.positive? ... end`.
+#     - `foos.select(&:zero?)` is still allowed even when comparison is enforced.
+Style/NumericPredicate:
+  EnforcedStyle: comparison
+
+# Use parens as %-literal delimiters.
+#
+# While square brackets are enforced by default, we've been using parens since a long time ago.
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%I': '()' # default: '[]'
+    '%i': '()' # default: '[]'
+    '%W': '()' # default: '[]'
+    '%w': '()' # default: '[]'
+
+# Allow Perl-style regex back references.
+Style/PerlBackrefs:
+  Enabled: false
+
+Style/RaiseArgs:
+  Enabled: false
+
+# Disable enforcement of safe navigation, which would prefer `foo&.bar` to `foo && foo.bar`.
+#
+# Rationale:
+#     - Certain kind of expressions do not have an equivalent using safe navigation, e.g., `foo && !foo.empty?`.
+#       (Could be written as `foo&.empty?&.!`, though not quite readable.)
+Style/SafeNavigation:
+  Enabled: false
+
+# Allow both `fail` and `raise` depending on context.
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+# Allow double-quoted string literal without interpolation in it.
+Style/StringLiterals:
+  Enabled: false
+
+# Allow both `%i(foo bar)` and `[:foo, :bar]`.
+Style/SymbolArray:
+  Enabled: false
+
+Style/TernaryParentheses:
+  Enabled: false
+
+# Allow trailing comma in method arguments.
+Style/TrailingCommaInArguments:
+  Enabled: false
+
+# Allow trailing comma in array literal.
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+# Allow trailing comma in hash literal.
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+Style/TrivialAccessors:
+  Enabled: false
+
+# Allow while/until statements even when they could be written as modifiers.
+Style/WhileUntilModifier:
+  Enabled: false
