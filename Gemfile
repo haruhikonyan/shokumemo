@@ -26,6 +26,12 @@ gem 'jbuilder', '~> 2.7'
 
 gem 'react-rails'
 
+gem 'devise'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'omniauth-google'
+gem 'omniauth-line'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
