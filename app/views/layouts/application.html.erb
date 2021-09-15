@@ -11,6 +11,15 @@
   </head>
 
   <body>
+    <%# TODO ナビバー作成 %>
+    <div class="fixed-top text-end border-bottom p-2">
+      <% if user_signed_in? %>
+        <%= link_to 'ログアウト', destroy_user_session_path %>
+      <% else%>
+        <%= link_to '仮ユーザログイン', kari_login_path, method: :post %>
+      <% end %>
+      ログイン中の user_id: <%= user_signed_in? ? current_user.id : '未ログイン' %>
+    </div>
     <%= yield %>
   </body>
 </html>

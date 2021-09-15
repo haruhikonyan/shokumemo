@@ -18,5 +18,5 @@
 #  index_users_on_uid  (uid) UNIQUE
 #
 class User < ApplicationRecord
-  devise :registerable, :rememberable, :omniauthable
+  devise :registerable, :rememberable, :omniauthable, omniauth_providers: [:facebook, :twitter, :google, :line]
 end
