@@ -5,6 +5,7 @@
 
 import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
+import axios from 'axios'
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 import "bootstrap"
@@ -16,3 +17,5 @@ ActiveStorage.start()
 var componentRequireContext = require.context("components", true);
 var ReactRailsUJS = require("react_ujs");
 ReactRailsUJS.useContext(componentRequireContext);
+
+axios.defaults.headers.common['X-CSRF-TOKEN'] = Rails.csrfToken();
