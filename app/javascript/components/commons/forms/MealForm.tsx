@@ -5,22 +5,22 @@ import { MealWithDishes } from "~/types/meals";
 
 export type FormInputs = MealWithDishes
 
-const Thumbnail: React.VFC<{file?: File, defaultImageURL?: string}> = ({file, defaultImageURL}) => {
-  const [imageURL, setImageURL] = useState<string>(defaultImageURL)
+const Thumbnail: React.VFC<{file?: File, defaultImageUrl?: string}> = ({file, defaultImageUrl}) => {
+  const [imageUrl, setImageUrl] = useState<string>(defaultImageUrl)
   useEffect(() => {
     if (file !== undefined) {
       const reader = new FileReader()
       reader.onload = (e: any) => {
-        setImageURL(e.target.result)
+        setImageUrl(e.target.result)
       }
       reader.readAsDataURL(file)
     }
     else {
-      setImageURL(undefined)
+      setImageUrl(defaultImageUrl)
     }
-  }, [file])
+  }, [file, defaultImageUrl])
   
-  return imageURL !== undefined ? <img src={imageURL} /> : null
+  return imageUrl !== undefined ? <img src={imageUrl} /> : null
 }
 
 type Props = {
@@ -102,7 +102,7 @@ const MealForm: React.VFC<Props> = ({dishImages, onChangeDishFiles}) => {
                 accept="image/*"
                 onChange={(e) => onChangeDishFile(e, index)}
               />
-              <Thumbnail file={dishImages[index]} />
+              <Thumbnail file={dishImages?.[index]} defaultImageUrl={field.imageUrl} />
             </div>
             <div className="mb-3">
               <label className="form-label">食べ物説明</label>

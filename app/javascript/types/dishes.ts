@@ -4,7 +4,7 @@ export type Dish = {
   id?: number;
   title?: string;
   description?: string;
-  imageURL?: string
+  imageUrl?: string
 }
 
 export type DishWithMeal = Dish & {

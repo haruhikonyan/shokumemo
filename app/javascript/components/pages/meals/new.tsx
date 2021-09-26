@@ -21,7 +21,9 @@ const NewMeal: React.VFC<Props> = () => {
     data.dishes.forEach((dish, index) => {
       formData.append('dishes[]title', dish.title);
       formData.append('dishes[]description', dish.description);
-      formData.append('dishes[]image', dishImages[index], dishImages[index].name);
+      if (dishImages[index] !== undefined) {
+        formData.append('dishes[]image', dishImages[index], dishImages[index].name);
+      }
     })
 
     const response = await axios.post('/api/v1/meals', formData);
