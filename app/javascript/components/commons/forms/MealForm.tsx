@@ -1,18 +1,64 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useFormContext, useFieldArray } from "react-hook-form";
 
 import { MealWithDishes } from "~/types/meals";
 
 export type FormInputs = MealWithDishes
 
-type Props = {}
-const MealForm: React.VFC<Props> = () => {
+const Thumbnail: React.VFC<{file?: File, defaultImageURL?: string}> = ({file, defaultImageURL}) => {
+  const [imageURL, setImageURL] = useState<string>(defaultImageURL)
+  useEffect(() => {
+    if (file !== undefined) {
+      const reader = new FileReader()
+      reader.onload = (e: any) => {
+        setImageURL(e.target.result)
+      }
+      reader.readAsDataURL(file)
+    }
+    else {
+      setImageURL(undefined)
+    }
+  }, [file])
+  
+  return imageURL !== undefined ? <img src={imageURL} /> : null
+}
+
+type Props = {
+  dishImages: (File | undefined)[];
+  onChangeDishFiles: (files: (File | undefined)[]) => void
+}
+const MealForm: React.VFC<Props> = ({dishImages, onChangeDishFiles}) => {
   const { register, control } = useFormContext<FormInputs>();
   const { fields, append, remove } = useFieldArray({
     control, // control props comes from useForm (optional: if you are using FormContext)
     name: "dishes", // unique name for your Field Array
     keyName: 'key'
   });
+
+  const onChangeDishFile = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const files = [...dishImages]
+    if (event.target.files == null || event.target.files.length === 0) {
+      files[index] = undefined
+    }
+    const file = event.target.files[0]
+    files[index] = file
+    onChangeDishFiles(files)
+  }
+
+  const appendHandler = () => {
+    append({
+      title: '',
+      description: '',
+    })
+    onChangeDishFiles([...dishImages, undefined])
+  }
+
+  const removeHandler = (index: number) => {
+    remove(index)
+    const files = [...dishImages]
+    files.splice(index, 1)
+    onChangeDishFiles(files)
+  }
 
   return (
     <>
@@ -49,6 +95,16 @@ const MealForm: React.VFC<Props> = () => {
               />
             </div>
             <div className="mb-3">
+              <label className="form-label">写真</label>
+              <input
+                className="form-control"
+                type="file"
+                accept="image/*"
+                onChange={(e) => onChangeDishFile(e, index)}
+              />
+              <Thumbnail file={dishImages[index]} />
+            </div>
+            <div className="mb-3">
               <label className="form-label">食べ物説明</label>
               <textarea
                 className="form-control"
@@ -57,7 +113,7 @@ const MealForm: React.VFC<Props> = () => {
                 {...register(`dishes.${index}.description` as const)}
               />
             </div>
-            <button type="button" onClick={() => remove(index)}
+            <button type="button" onClick={() => removeHandler(index)}
               className="btn btn-danger">
               食べ物を削除
             </button>
@@ -66,12 +122,7 @@ const MealForm: React.VFC<Props> = () => {
       })}
       <button
         type="button"
-        onClick={() =>
-          append({
-            title: '',
-            description: '',
-          })
-        }
+        onClick={appendHandler}
         className="btn btn-success"
       >
         食べ物を追加

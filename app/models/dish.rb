@@ -19,4 +19,6 @@
 #
 class Dish < ApplicationRecord
   belongs_to :meal
+  
+  has_one_attached :image
 end

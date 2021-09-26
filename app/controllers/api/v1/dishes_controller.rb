@@ -44,7 +44,7 @@ module Api
 
         # Only allow a list of trusted parameters through.
         def dish_params
-          params.require(:dish).permit(:title, :description, :meal_id)
+          params.require(:dish).permit(:title, :description, :meal_id, :image)
         end
     end
   end
