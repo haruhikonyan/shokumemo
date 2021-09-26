@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext, useFieldArray } from "react-hook-form";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera } from '@fortawesome/free-solid-svg-icons'
+import { faFileImage } from '@fortawesome/free-regular-svg-icons'
 
 import { MealWithDishes } from "~/types/meals";
 
@@ -20,7 +23,7 @@ const Thumbnail: React.VFC<{file?: File, defaultImageUrl?: string}> = ({file, de
     }
   }, [file, defaultImageUrl])
   
-  return imageUrl !== undefined ? <img src={imageUrl} /> : null
+  return imageUrl !== undefined ? <img src={imageUrl} className="img-fluid" /> : null
 }
 
 type Props = {
@@ -34,6 +37,12 @@ const MealForm: React.VFC<Props> = ({dishImages, onChangeDishFiles}) => {
     name: "dishes", // unique name for your Field Array
     keyName: 'key'
   });
+
+  useEffect(() => {
+    if(fields.length === 0) {
+      appendHandler();
+    }
+  }, [])
 
   const onChangeDishFile = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const files = [...dishImages]
@@ -84,7 +93,7 @@ const MealForm: React.VFC<Props> = ({dishImages, onChangeDishFiles}) => {
 
       {fields.map((field, index) => {
         return (
-          <div key={field.key}>
+          <div className="border p-3 mb-3" key={field.key}>
             <div className="mb-3">
               <label className="form-label">食べ物タイトル</label>
               <input
@@ -96,12 +105,26 @@ const MealForm: React.VFC<Props> = ({dishImages, onChangeDishFiles}) => {
             </div>
             <div className="mb-3">
               <label className="form-label">写真</label>
-              <input
-                className="form-control"
-                type="file"
-                accept="image/*"
-                onChange={(e) => onChangeDishFile(e, index)}
-              />
+              <label className="form-label ms-2">
+                <input
+                  className="d-none"
+                  type="file"
+                  accept="image/*"
+                  capture="camera"
+                  onChange={(e) => onChangeDishFile(e, index)}
+                />
+                <FontAwesomeIcon icon={faCamera} size="2x" />
+              </label>
+
+              <label className="form-label ms-2">
+                <input
+                  className="d-none"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => onChangeDishFile(e, index)}
+                />
+                <FontAwesomeIcon icon={faFileImage} size="2x" />
+              </label>
               <Thumbnail file={dishImages?.[index]} defaultImageUrl={field.imageUrl} />
             </div>
             <div className="mb-3">
