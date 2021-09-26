@@ -20,7 +20,7 @@
 class Meal < ApplicationRecord
   belongs_to :user
   has_many :dishes
-  accepts_nested_attributes_for :dishes
+  accepts_nested_attributes_for :dishes, allow_destroy: true
   
   has_one_attached :image
 end

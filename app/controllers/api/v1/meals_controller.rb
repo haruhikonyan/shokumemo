@@ -46,7 +46,17 @@ module Api
         # Only allow a list of trusted parameters through.
         def meal_params
           # なんか最適化できそう
-          parmit_params = params.permit(:title, :description, dishes: [:id, :title, :description, :image])
+          if @meal.present?
+            destroy_ids = @meal.dishes.pluck(:id) - params[:dishes].pluck(:id).map(&:to_i)
+            if destroy_ids.present?
+              params[:dishes].concat(
+                destroy_ids.map do |id|
+                  { id: id, _destroy: 1 }
+                end
+              )
+            end
+          end
+          parmit_params = params.permit(:title, :description, dishes: [:id, :title, :description, :image, :_destroy])
           {
             user: current_user,
             title: parmit_params[:title],
