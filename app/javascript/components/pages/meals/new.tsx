@@ -7,6 +7,8 @@ import MealForm, { FormInputs } from "@commons/forms/MealForm";
 type Props = {}
 const NewMeal: React.VFC<Props> = () => {
   const [dishImages, setDishImages] = useState<(File | undefined)[]>([])
+  const [isAPIRequesting, setIsAPIRequesting] = useState<boolean>(false)
+
   const methods = useForm<FormInputs>();
 
   const onChangeDishFiles = useCallback((files: (File | undefined)[]) => {
@@ -14,16 +16,17 @@ const NewMeal: React.VFC<Props> = () => {
   }, [])
 
   const onSubmit = async (data: FormInputs) => {
+    setIsAPIRequesting(true);
+
     let formData = new FormData();
-    formData.append('title', data.title)
-    formData.append('description', data.description)
-    // formData.append('image', mealImage, mealImage.name)
+
+    if (data.title !== undefined) formData.append('title', data.title);
+    if (data.description !== undefined) formData.append('description', data.description);
     data.dishes.forEach((dish, index) => {
-      formData.append('dishes[]title', dish.title);
-      formData.append('dishes[]description', dish.description);
-      if (dishImages[index] !== undefined) {
-        formData.append('dishes[]image', dishImages[index], dishImages[index].name);
-      }
+      if (dish.id !== undefined) formData.append('dishes[]id', dish.id?.toString());
+      if (dish.title !== undefined) formData.append('dishes[]title', dish.title);
+      if (dish.description !== undefined) formData.append('dishes[]description', dish.description);
+      if (dishImages[index] !== undefined) formData.append('dishes[]image', dishImages[index], dishImages[index].name);
     })
 
     const response = await axios.post('/api/v1/meals', formData);
@@ -37,7 +40,7 @@ const NewMeal: React.VFC<Props> = () => {
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <MealForm dishImages={dishImages} onChangeDishFiles={onChangeDishFiles} />
 
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary" disabled={isAPIRequesting}>
             投稿
           </button>
         </form>
