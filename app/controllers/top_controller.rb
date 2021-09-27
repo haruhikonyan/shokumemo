@@ -1,6 +1,6 @@
 class TopController < ApplicationController
   def index
-    @dishes = Dish.all
+    @meals = Meal.all
   end
 
   def kari_login

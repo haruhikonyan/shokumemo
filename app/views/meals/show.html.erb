@@ -1,19 +1,13 @@
 <p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Title:</strong>
-  <%= @meal.title %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-  <%= @meal.description %>
-</p>
-
-<p>
-  <strong>User:</strong>
-  <%= @meal.user_id %>
-</p>
+<h1><%= @meal.title.presence || 'No title' %></h1>
+<div class="pre"><%= @meal.description %></div>
+<% @meal.dishes.each do |dish| %>
+  <div class="border p-3 mt-3">
+    <h3><%= dish.title.presence || 'No title' %></h3>
+    <%= dish.image.attached? ? image_tag(url_for(dish.image), class: 'img-fluid') : 'No image' %>
+    <div class="pre"><%= dish.description %></div>
+  </div>
+<% end %>
 
 <%= link_to 'Edit', edit_meal_path(@meal) %> |
 <%= link_to 'Back', meals_path %>

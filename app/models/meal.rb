@@ -19,8 +19,13 @@
 #
 class Meal < ApplicationRecord
   belongs_to :user
-  has_many :dishes
+  has_many :dishes, dependent: :destroy
   accepts_nested_attributes_for :dishes, allow_destroy: true
   
   has_one_attached :image
+
+  def thumbnail_image
+    # サムネイルフラグなりを持たせてそれを選択する
+    dishes.first&.image
+  end
 end

@@ -1,1 +1,15 @@
-top
+<h1>投稿</h1>
+<div class="row">
+  <% @meals.each do |meal| %>
+    <div class="col-xs-12 col-md-4">
+      <%= link_to(meal_path(meal), class: 'card') do %>
+        <div class="card-header">
+          <%= meal.title.presence || 'No title' %>
+        </div>
+        <div class="card-body">
+          <%= meal.thumbnail_image.attached? ? image_tag(url_for(meal.thumbnail_image), class: 'img-fluid') : 'No image' %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
