@@ -2,12 +2,12 @@
 #
 # Table name: dishes
 #
-#  id          :integer          not null, primary key
-#  description :text
-#  title       :string
+#  id          :bigint           not null, primary key
+#  description :text(65535)
+#  title       :string(255)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  meal_id     :integer          not null
+#  meal_id     :bigint           not null
 #
 # Indexes
 #
@@ -15,7 +15,7 @@
 #
 # Foreign Keys
 #
-#  meal_id  (meal_id => meals.id)
+#  fk_rails_...  (meal_id => meals.id)
 #
 class Dish < ApplicationRecord
   belongs_to :meal
