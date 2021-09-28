@@ -20,7 +20,6 @@ module Api
       # PATCH/PUT /meals/1 or /meals/1.json
       def update
         respond_to do |format|
-          # TODO: 食べ物削除を考慮(削除フラグつけたりするやつ)
           if @meal.update(meal_params)
             format.json { render :show, status: :ok, location: @meal }
           else

@@ -19,6 +19,17 @@
 #
 class Dish < ApplicationRecord
   belongs_to :meal
+  after_commit :generate_thumbnail_image_and_attach, if: -> { !thumbnail_image.attached? }
   
   has_one_attached :image
+  has_one_attached :thumbnail_image
+
+  after_save do
+    thumbnail_image.purge if image.blob.saved_change_to_checksum? && thumbnail_image.attached? && !thumbnail_image.saved_change_to_checksum?
+  end
+
+  def generate_thumbnail_image_and_attach
+    path = ImageProcessing::MiniMagick.source(ActiveStorage::Blob.service.send(:path_for, image.key)).resize_to_limit(1600, 1200).call.path
+    thumbnail_image.attach(io: File.open(path), filename: image.name)
+  end
 end
