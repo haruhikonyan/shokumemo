@@ -7,7 +7,7 @@
           <%= meal.title.presence || 'No title' %>
         </div>
         <div class="card-body p-2">
-          <%= meal.thumbnail_image.attached? ? image_tag(url_for(meal.thumbnail_image), class: 'img-fluid') : 'No image' %>
+          <%= meal.thumbnail_image.present? ? image_tag(url_for(meal.thumbnail_image), class: 'img-fluid') : 'No image' %>
         </div>
       <% end %>
     </div>

@@ -1,5 +1,6 @@
 json.meal do
-  json.extract! @meal, :id, :title, :description
+  json.extract! @meal, :id, :title, :description, :scene, :thumbnail_dish_id
+  json.is_private @meal.private
   json.dishes do
     json.array! @meal.dishes do |dish|
       json.extract! dish, :id, :title, :description
@@ -8,3 +9,4 @@ json.meal do
     end
   end
 end
+json.scene_label_and_values Meal.scene_label_and_values

@@ -2,10 +2,12 @@ import React, { useCallback, useState } from "react"
 import axios from "axios";
 import { useForm, FormProvider } from "react-hook-form";
 
+import { sceneLabelAndValues } from "~/types/meals";
+
 import MealForm, { FormInputs } from "@commons/forms/MealForm";
 
-type Props = {}
-const NewMeal: React.VFC<Props> = () => {
+type Props = {sceneLabelAndValues: sceneLabelAndValues}
+const NewMeal: React.VFC<Props> = ({sceneLabelAndValues}) => {
   const [dishImages, setDishImages] = useState<(File | undefined)[]>([])
   const [isAPIRequesting, setIsAPIRequesting] = useState<boolean>(false)
 
@@ -22,6 +24,8 @@ const NewMeal: React.VFC<Props> = () => {
 
     if (data.title !== undefined) formData.append('title', data.title);
     if (data.description !== undefined) formData.append('description', data.description);
+    formData.append('scene', data.scene);
+    formData.append('private', data.isPrivate.toString());
     data.dishes.forEach((dish, index) => {
       if (dish.id !== undefined) formData.append('dishes[]id', dish.id?.toString());
       if (dish.title !== undefined) formData.append('dishes[]title', dish.title);
@@ -38,7 +42,7 @@ const NewMeal: React.VFC<Props> = () => {
       <h1>食メモ新規作成</h1>
       <FormProvider {...methods} >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <MealForm dishImages={dishImages} onChangeDishFiles={onChangeDishFiles} />
+          <MealForm dishImages={dishImages} sceneLabelAndValues={sceneLabelAndValues} onChangeDishFiles={onChangeDishFiles} />
 
           <button type="submit" className="btn btn-primary" disabled={isAPIRequesting}>
             投稿

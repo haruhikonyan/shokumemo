@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera } from '@fortawesome/free-solid-svg-icons'
+import { faCamera, faKeyboard } from '@fortawesome/free-solid-svg-icons'
 import { faFileImage } from '@fortawesome/free-regular-svg-icons'
 
-import { MealWithDishes } from "~/types/meals";
+import { MealWithDishes, sceneLabelAndValues } from "~/types/meals";
 
 export type FormInputs = MealWithDishes
 
@@ -28,9 +28,10 @@ const Thumbnail: React.VFC<{file?: File, defaultImageUrl?: string}> = ({file, de
 
 type Props = {
   dishImages: (File | undefined)[];
+  sceneLabelAndValues: sceneLabelAndValues;
   onChangeDishFiles: (files: (File | undefined)[]) => void
 }
-const MealForm: React.VFC<Props> = ({dishImages, onChangeDishFiles}) => {
+const MealForm: React.VFC<Props> = ({dishImages, sceneLabelAndValues, onChangeDishFiles}) => {
   const { register, control } = useFormContext<FormInputs>();
   const { fields, append, remove } = useFieldArray({
     control, // control props comes from useForm (optional: if you are using FormContext)
@@ -80,7 +81,16 @@ const MealForm: React.VFC<Props> = ({dishImages, onChangeDishFiles}) => {
           {...register("title")}
         />
       </div>
-
+      <div className="mb-3">
+        <label className="form-label">種別</label>
+        <select className="form-control" {...register("scene", { required: true })}>
+          {
+            sceneLabelAndValues.map(([label, value]) => {
+              return <option key={value} value={value}>{label}</option>
+            })
+          }
+        </select>
+      </div>
       <div className="mb-3">
         <label className="form-label">説明</label>
         <textarea
@@ -143,6 +153,19 @@ const MealForm: React.VFC<Props> = ({dishImages, onChangeDishFiles}) => {
           </div>
         );
       })}
+      <div className="mb-3">
+        <div className="custom-control custom-checkbox">
+          <input
+            type="checkbox"
+            className="custom-control-input"
+            id="is-private"
+            {...register('isPrivate')}
+          />
+          <label className="custom-control-label" htmlFor="is-private">
+            非公開
+          </label>
+        </div>
+      </div>
       <button
         type="button"
         onClick={appendHandler}

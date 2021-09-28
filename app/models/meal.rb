@@ -30,8 +30,9 @@ class Meal < ApplicationRecord
 
   enum scene: { unknown: 0, breakfast: 1, brunch: 2, runch: 3, dinner: 4, snack: 5, drink: 6, late_night_snack: 7, other: 99 }
 
+  # TODO: ちょっと微妙 ヘルパーのがいいかな？
   def thumbnail_image
-    thumbnail_dish.thumbnail_image
+    thumbnail_dish&.thumbnail_image
   end
 
   # TODO: ゆくゆくは i18n
@@ -40,7 +41,7 @@ class Meal < ApplicationRecord
     return '朝ごはん' if breakfast?
     return 'ブランチ' if brunch?
     return '昼ごはん' if runch?
-    return '夜ご飯' if dinner?
+    return '夜ごはん' if dinner?
     return 'おやつ' if snack?
     return '飲み' if drink?
     return '夜食' if late_night_snack?
@@ -52,10 +53,25 @@ class Meal < ApplicationRecord
     return '朝ごはん' if num == 1
     return 'ブランチ' if num == 2
     return '昼ごはん' if num == 3
-    return '夜ご飯' if num == 4
+    return '夜ごはん' if num == 4
     return 'おやつ' if num == 5
     return '飲み' if num == 6
     return '夜食' if num == 7
     return 'その他' if num == 99
+  end
+
+  # TODO: Meal.scenes とか i18n 使っていい感じにする
+  def self.scene_label_and_values
+    [
+      ['なし', 'unknown'],
+      ['朝ごはん', 'breakfast'],
+      ['ブランチ', 'brunch'],
+      ['昼ごはん', 'runch'],
+      ['夜ごはん', 'dinner'],
+      ['おやつ', 'snack'],
+      ['飲み', 'drink'],
+      ['夜食', 'late_night_snack'],
+      ['その他', 'other']
+    ]
   end
 end

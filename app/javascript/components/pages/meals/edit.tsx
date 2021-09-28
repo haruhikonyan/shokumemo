@@ -2,12 +2,12 @@ import React, { useState, useCallback } from "react"
 import axios from "axios";
 import { useForm, FormProvider } from "react-hook-form";
 
-import { MealWithDishes } from "~/types/meals";
+import { MealWithDishes, sceneLabelAndValues } from "~/types/meals";
 
 import MealForm, { FormInputs } from "@commons/forms/MealForm";
 
-type Props = { meal: MealWithDishes }
-const EditMeal: React.VFC<Props> = ({ meal }) => {
+type Props = { meal: MealWithDishes, sceneLabelAndValues: sceneLabelAndValues }
+const EditMeal: React.VFC<Props> = ({ meal, sceneLabelAndValues }) => {
   const [dishImages, setDishImages] = useState<(File | undefined)[]>(meal.dishes.map(_ => undefined))
   const [isAPIRequesting, setIsAPIRequesting] = useState<boolean>(false)
 
@@ -28,6 +28,8 @@ const EditMeal: React.VFC<Props> = ({ meal }) => {
 
     if (data.title !== undefined) formData.append('title', data.title);
     if (data.description !== undefined) formData.append('description', data.description);
+    formData.append('scene', data.scene);
+    formData.append('private', data.isPrivate.toString());
     data.dishes.forEach((dish, index) => {
       if (dish.id !== undefined) formData.append('dishes[]id', dish.id?.toString());
       if (dish.title !== undefined) formData.append('dishes[]title', dish.title);
@@ -44,7 +46,7 @@ const EditMeal: React.VFC<Props> = ({ meal }) => {
       <h1>食メモ編集</h1>
       <FormProvider {...methods} >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <MealForm dishImages={dishImages} onChangeDishFiles={onChangeDishFiles} />
+          <MealForm dishImages={dishImages} sceneLabelAndValues={sceneLabelAndValues} onChangeDishFiles={onChangeDishFiles} />
 
           <button type="submit" className="btn btn-primary" disabled={isAPIRequesting}>
             編集
