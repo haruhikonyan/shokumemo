@@ -4,7 +4,7 @@
 <% @meal.dishes.each do |dish| %>
   <div class="border p-3 mt-3">
     <h3><%= dish.title.presence || 'No title' %></h3>
-    <%= dish.thumbnail_image.attached? ? link_to(image_tag(url_for(dish.thumbnail_image)), url_for(dish.image), class: 'img-fluid') : 'No image' %>
+    <%= dish.thumbnail_image.attached? ? link_to(image_tag(url_for(dish.thumbnail_image), class: 'img-fluid'), url_for(dish.full_size_image)) : 'No image' %>
     <div class="pre"><%= dish.description %></div>
   </div>
 <% end %>

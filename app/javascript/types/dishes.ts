@@ -4,7 +4,7 @@ export type Dish = {
   id?: number;
   title?: string;
   description?: string;
-  imageUrl?: string
+  fullSizeImageUrl?: string
   thumbnailImageUrl?: string
 }
 
