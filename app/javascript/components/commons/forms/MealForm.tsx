@@ -125,7 +125,7 @@ const MealForm: React.VFC<Props> = ({dishImages, onChangeDishFiles}) => {
                 />
                 <FontAwesomeIcon icon={faFileImage} size="2x" />
               </label>
-              <Thumbnail file={dishImages?.[index]} defaultImageUrl={field.imageUrl} />
+              <Thumbnail file={dishImages?.[index]} defaultImageUrl={field.thumbnailImageUrl} />
             </div>
             <div className="mb-3">
               <label className="form-label">食べ物説明</label>

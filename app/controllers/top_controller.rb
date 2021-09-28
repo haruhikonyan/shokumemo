@@ -1,6 +1,6 @@
 class TopController < ApplicationController
   def index
-    @meals = Meal.all
+    @meals = Meal.includes(dishes: { thumbnail_image_attachment: :blob }).all
   end
 
   def kari_login

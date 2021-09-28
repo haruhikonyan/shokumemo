@@ -26,6 +26,6 @@ class Meal < ApplicationRecord
 
   def thumbnail_image
     # サムネイルフラグなりを持たせてそれを選択する
-    dishes.first&.image
+    dishes.first&.thumbnail_image
   end
 end
