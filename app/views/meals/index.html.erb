@@ -2,14 +2,7 @@
 <div class="row">
   <% @meals.each do |meal| %>
     <div class="col-xs-12 col-md-4 mb-3">
-      <%= link_to(meal_path(meal), class: 'card') do %>
-        <div class="card-header">
-          <%= meal.title.presence || 'No title' %>
-        </div>
-        <div class="card-body p-2">
-          <%= meal.thumbnail_image.present? ? image_tag(url_for(meal.thumbnail_image), class: 'img-fluid') : 'No image' %>
-        </div>
-      <% end %>
+      <%= render partial: 'meal_card', locals: { meal: meal }%>
     </div>
   <% end %>
 </div>

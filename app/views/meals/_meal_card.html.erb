@@ -1,0 +1,9 @@
+<%= link_to(meal_path(meal), class: 'card') do %>
+  <div class="card-header">
+    <%= meal.title.presence || 'No title' %>
+    <span class="badge bg-primary float-end"><%= meal.scene_label %></span>
+  </div>
+  <div class="card-body p-2">
+    <%= meal.thumbnail_image.present? ? image_tag(meal.thumbnail_image.variant(resize_to_fill: [480, 480]).processed, class: 'img-fluid') : 'No image' %>
+  </div>
+<% end %>

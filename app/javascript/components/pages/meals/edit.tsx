@@ -49,7 +49,7 @@ const EditMeal: React.VFC<Props> = ({ meal, sceneLabelAndValues }) => {
           <MealForm dishImages={dishImages} sceneLabelAndValues={sceneLabelAndValues} onChangeDishFiles={onChangeDishFiles} />
 
           <button type="submit" className="btn btn-primary" disabled={isAPIRequesting}>
-            編集
+            保存
           </button>
         </form>
       </FormProvider>

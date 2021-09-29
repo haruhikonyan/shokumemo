@@ -29,7 +29,7 @@ class Dish < ApplicationRecord
   end
 
   def generate_thumbnail_image_and_attach
-    path = ImageProcessing::MiniMagick.source(ActiveStorage::Blob.service.send(:path_for, full_size_image.key)).resize_to_limit(1600, 1200).call.path
+    path = ImageProcessing::MiniMagick.source(ActiveStorage::Blob.service.send(:path_for, full_size_image.key)).resize_to_limit(1200, 900).call.path
     thumbnail_image.attach(io: File.open(path), filename: full_size_image.name)
   end
 end

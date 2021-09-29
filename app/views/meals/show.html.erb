@@ -1,5 +1,6 @@
 <p id="notice"><%= notice %></p>
 <h1><%= @meal.title.presence || 'No title' %></h1>
+<span class="badge bg-primary float-end"><%= @meal.scene_label %></span>
 <div class="pre"><%= @meal.description %></div>
 <% @meal.dishes.each do |dish| %>
   <div class="border p-3 mt-3">
