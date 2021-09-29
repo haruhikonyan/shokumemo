@@ -17,9 +17,10 @@
       <div class="ms-auto">
         <% if user_signed_in? %>
           <%= link_to '投稿', new_meal_path %>
+          <%= link_to 'マイページ', mypage_index_path %>
           <%= link_to 'ログアウト', destroy_user_session_path %>
         <% else%>
-          <%= link_to 'ログイン', login_path %>
+          <%= link_to 'ログイン', login_index_path %>
         <% end %>
         user_id: <%= user_signed_in? ? "#{current_user.id}" : '未ログイン' %>
       </div>

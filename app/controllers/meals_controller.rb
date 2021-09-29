@@ -38,7 +38,7 @@ class MealsController < ApplicationController
   # DELETE /meals/1 or /meals/1.json
   def destroy
     @meal.destroy
-    redirect_to meals_url, notice: "Meal was successfully destroyed."
+    redirect_to mypage_index_path, notice: "Meal was successfully destroyed."
   end
 
   private

@@ -1,8 +1,13 @@
 Rails.application.routes.draw do
   root to: 'top#index'
 
-  get 'login', to: 'login#index'
-  post 'kari_login', to: 'login#kari_login'
+  resources :login, only: [:index] do
+    collection do
+      post :kari_login
+    end
+  end
+
+  resources :mypage, only: [:index]
   
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   devise_scope :user do
