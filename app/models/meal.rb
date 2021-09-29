@@ -32,7 +32,8 @@ class Meal < ApplicationRecord
 
   # TODO: ちょっと微妙 ヘルパーのがいいかな？
   def thumbnail_image
-    thumbnail_dish&.thumbnail_image
+    # active storage で where ってどう使うの？
+    thumbnail_dish.present? ? thumbnail_dish.thumbnail_image : dishes.find{|d| d.thumbnail_image.attached? }.thumbnail_image
   end
 
   # TODO: ゆくゆくは i18n

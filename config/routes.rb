@@ -8,7 +8,11 @@ Rails.application.routes.draw do
 
   # 仮 sucaffold そのまま置いている
   resources :dishes, only: [:index, :show, :new, :edit]
-  resources :meals, only: [:index, :show, :new, :edit, :destroy]
+  resources :meals, only: [:index, :show, :new, :edit, :destroy] do
+    member do
+      post :thumbnail_dish, to: 'meals#set_thumbnail_dish'
+    end
+  end
 
   namespace :api, defaults: { format: :json }  do
     namespace 'v1' do
