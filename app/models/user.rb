@@ -19,4 +19,5 @@
 #
 class User < ApplicationRecord
   devise :registerable, :rememberable, :omniauthable, omniauth_providers: [:facebook, :twitter, :google, :line]
+  has_many :meals
 end

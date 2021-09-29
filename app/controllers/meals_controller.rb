@@ -1,9 +1,13 @@
 class MealsController < ApplicationController
+  before_action :authenticate_user!, only: %i[ new edit set_thumbnail_dish destroy ]
   before_action :set_meal, only: %i[ show edit destroy set_thumbnail_dish ]
+  before_action :set_is_my_meal, only: %i[ show edit set_thumbnail_dish destroy ]
+  before_action :my_meal!, only: %i[ edit set_thumbnail_dish destroy ]
 
   # GET /meals or /meals.json
+  # 検索結果ページになる？
   def index
-    @meals = Meal.all
+    @meals = Meal.includes(dishes: { thumbnail_image_attachment: :blob }).release
   end
 
   # GET /meals/1 or /meals/1.json
@@ -40,5 +44,13 @@ class MealsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_meal
       @meal = Meal.find(params[:id])
+    end
+
+    def set_is_my_meal
+      @is_my_meal = @meal.user == current_user
+    end
+
+    def my_meal!
+      redirect_to root_path unless @is_my_meal
     end
 end

@@ -28,6 +28,8 @@ class Meal < ApplicationRecord
   has_many :dishes, dependent: :destroy
   accepts_nested_attributes_for :dishes, allow_destroy: true
 
+  scope :release, -> { where(private: false) }
+
   enum scene: { unknown: 0, breakfast: 1, brunch: 2, runch: 3, dinner: 4, snack: 5, drink: 6, late_night_snack: 7, other: 99 }
 
   # TODO: ちょっと微妙 ヘルパーのがいいかな？

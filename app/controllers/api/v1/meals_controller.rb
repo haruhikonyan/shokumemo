@@ -1,7 +1,9 @@
 module Api
   module V1
     class MealsController < ApplicationController
+      before_action :authenticate_user!, only: %i[ create update destroy ]
       before_action :set_meal, only: %i[ update destroy ]
+      before_action :my_meal!, only: %i[ update destroy ]
 
       # POST /meals or /meals.json
       def create
@@ -65,6 +67,10 @@ module Api
             private: parmit_params[:private] == 'true',
             dishes_attributes: parmit_params[:dishes]
           }
+        end
+
+        def my_meal!
+          redirect_to root_path if @meal.user != current_user
         end
     end
   end

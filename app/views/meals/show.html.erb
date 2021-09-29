@@ -3,17 +3,18 @@
 <div class="pre"><%= @meal.description %></div>
 <% @meal.dishes.each do |dish| %>
   <div class="border p-3 mt-3">
-    <% if dish.id == @meal.thumbnail_dish_id %>
+    <% if @is_my_meal && dish.id == @meal.thumbnail_dish_id %>
       <span class="badge bg-info float-end">サムネイル設定中</span>
     <% end %>
     <h3><%= dish.title.presence || 'No title' %></h3>
     <%= dish.thumbnail_image.attached? ? link_to(image_tag(url_for(dish.thumbnail_image), class: 'img-fluid'), url_for(dish.full_size_image)) : 'No image' %>
     <div class="pre"><%= dish.description %></div>
-    <% if dish.id != @meal.thumbnail_dish_id && dish.thumbnail_image.attached? %>
+    <% if  @is_my_meal && dish.id != @meal.thumbnail_dish_id && dish.thumbnail_image.attached? %>
       <%= link_to "サムネイルに設定", {controller: "meals", action: "set_thumbnail_dish", dish_id: dish.id}, method: :post %>
     <% end %>
   </div>
 <% end %>
-
-<%= link_to 'Edit', edit_meal_path(@meal) %> |
+<% if @is_my_meal %>
+  <%= link_to 'Edit', edit_meal_path(@meal) %> |
+<% end %>
 <%= link_to 'Back', meals_path %>
