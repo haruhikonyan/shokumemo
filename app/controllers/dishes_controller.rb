@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class DishesController < ApplicationController
-  before_action :set_dish, only: %i[ show edit ]
+  before_action :set_dish, only: %i(show edit)
 
   # GET /dishes or /dishes.json
   def index
@@ -20,8 +22,9 @@ class DishesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_dish
-      @dish = Dish.find(params[:id])
-    end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_dish
+    @dish = Dish.find(params[:id])
+  end
 end

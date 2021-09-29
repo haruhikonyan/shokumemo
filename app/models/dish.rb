@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: dishes
@@ -20,7 +22,7 @@
 class Dish < ApplicationRecord
   belongs_to :meal
   after_commit :generate_thumbnail_image_and_attach, if: -> { !thumbnail_image.attached? && full_size_image.attached? }
-  
+
   has_one_attached :full_size_image
   has_one_attached :thumbnail_image
 

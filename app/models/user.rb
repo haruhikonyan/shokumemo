@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -19,5 +21,5 @@
 #
 class User < ApplicationRecord
   devise :registerable, :rememberable, :omniauthable, omniauth_providers: [:facebook, :twitter, :google, :line]
-  has_many :meals
+  has_many :meals, dependent: :destroy
 end

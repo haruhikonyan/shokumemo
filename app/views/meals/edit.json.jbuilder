@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.meal do
   json.extract! @meal, :id, :title, :description, :scene, :thumbnail_dish_id
   json.is_private @meal.private

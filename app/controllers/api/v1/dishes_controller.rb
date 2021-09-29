@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     # 仮 sucaffold そのまま置いている
     class DishesController < ApplicationController
-      before_action :set_dish, only: %i[ update destroy ]
+      before_action :set_dish, only: %i(update destroy)
 
       # POST /api/v1/dishes or /api/v1/dishes.json
       def create
@@ -37,15 +39,16 @@ module Api
       end
 
       private
-        # Use callbacks to share common setup or constraints between actions.
-        def set_dish
-          @dish = Dish.find(params[:id])
-        end
 
-        # Only allow a list of trusted parameters through.
-        def dish_params
-          params.require(:dish).permit(:title, :description, :meal_id, :image)
-        end
+      # Use callbacks to share common setup or constraints between actions.
+      def set_dish
+        @dish = Dish.find(params[:id])
+      end
+
+      # Only allow a list of trusted parameters through.
+      def dish_params
+        params.require(:dish).permit(:title, :description, :meal_id, :image)
+      end
     end
   end
 end

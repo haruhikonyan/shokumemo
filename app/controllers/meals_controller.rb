@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class MealsController < ApplicationController
-  before_action :authenticate_user!, only: %i[ new edit set_thumbnail_dish destroy ]
-  before_action :set_meal, only: %i[ show edit destroy set_thumbnail_dish ]
-  before_action :set_is_my_meal, only: %i[ show edit set_thumbnail_dish destroy ]
-  before_action :my_meal!, only: %i[ edit set_thumbnail_dish destroy ]
+  before_action :authenticate_user!, only: %i(new edit set_thumbnail_dish destroy)
+  before_action :set_meal, only: %i(show edit destroy set_thumbnail_dish)
+  before_action :set_is_my_meal, only: %i(show edit set_thumbnail_dish destroy)
+  before_action :my_meal!, only: %i(edit set_thumbnail_dish destroy)
 
   # GET /meals or /meals.json
   # 検索結果ページになる？
@@ -12,7 +14,7 @@ class MealsController < ApplicationController
 
   # GET /meals/1 or /meals/1.json
   def show
-    render_404 if @meal.private && current_user != @meal.user
+    _render_404 if @meal.private && current_user != @meal.user
   end
 
   # GET /meals/new
@@ -42,16 +44,17 @@ class MealsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_meal
-      @meal = Meal.find(params[:id])
-    end
 
-    def set_is_my_meal
-      @is_my_meal = @meal.user == current_user
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_meal
+    @meal = Meal.find(params[:id])
+  end
 
-    def my_meal!
-      redirect_to root_path unless @is_my_meal
-    end
+  def set_is_my_meal
+    @is_my_meal = @meal.user == current_user
+  end
+
+  def my_meal!
+    redirect_to root_path unless @is_my_meal
+  end
 end

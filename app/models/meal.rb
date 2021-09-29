@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: meals
@@ -35,7 +37,7 @@ class Meal < ApplicationRecord
   # TODO: ちょっと微妙 ヘルパーのがいいかな？
   def thumbnail_image
     # active storage で where ってどう使うの？
-    thumbnail_dish.present? ? thumbnail_dish.thumbnail_image : dishes.find{|d| d.thumbnail_image.attached? }.thumbnail_image
+    thumbnail_dish.present? ? thumbnail_dish.thumbnail_image : dishes.find { |d| d.thumbnail_image.attached? }.thumbnail_image
   end
 
   # TODO: ゆくゆくは i18n
@@ -52,7 +54,7 @@ class Meal < ApplicationRecord
   end
 
   def self.scene_label(num)
-    return 'なし' if num.zero?
+    return 'なし' if num == 0
     return '朝ごはん' if num == 1
     return 'ブランチ' if num == 2
     return '昼ごはん' if num == 3
@@ -66,15 +68,15 @@ class Meal < ApplicationRecord
   # TODO: Meal.scenes とか i18n 使っていい感じにする
   def self.scene_label_and_values
     [
-      ['なし', 'unknown'],
-      ['朝ごはん', 'breakfast'],
-      ['ブランチ', 'brunch'],
-      ['昼ごはん', 'runch'],
-      ['夜ごはん', 'dinner'],
-      ['おやつ', 'snack'],
-      ['飲み', 'drink'],
-      ['夜食', 'late_night_snack'],
-      ['その他', 'other']
+      %w(なし unknown),
+      %w(朝ごはん breakfast),
+      %w(ブランチ brunch),
+      %w(昼ごはん runch),
+      %w(夜ごはん dinner),
+      %w(おやつ snack),
+      %w(飲み drink),
+      %w(夜食 late_night_snack),
+      %w(その他 other)
     ]
   end
 end

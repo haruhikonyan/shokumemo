@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class MealsController < ApplicationController
-      before_action :authenticate_user!, only: %i[ create update destroy ]
-      before_action :set_meal, only: %i[ update destroy ]
-      before_action :my_meal!, only: %i[ update destroy ]
+      before_action :authenticate_user!, only: %i(create update destroy)
+      before_action :set_meal, only: %i(update destroy)
+      before_action :my_meal!, only: %i(update destroy)
 
       # POST /meals or /meals.json
       def create
@@ -39,39 +41,40 @@ module Api
       end
 
       private
-        # Use callbacks to share common setup or constraints between actions.
-        def set_meal
-          @meal = Meal.find(params[:id])
-        end
 
-        # Only allow a list of trusted parameters through.
-        def meal_params
-          # なんか最適化できそう
-          if @meal.present?
-            destroy_ids = @meal.dishes.pluck(:id) - params[:dishes].pluck(:id).map(&:to_i)
-            if destroy_ids.present?
-              params[:dishes].concat(
-                destroy_ids.map do |id|
-                  { id: id, _destroy: 1 }
-                end
-              )
-            end
+      # Use callbacks to share common setup or constraints between actions.
+      def set_meal
+        @meal = Meal.find(params[:id])
+      end
+
+      # Only allow a list of trusted parameters through.
+      def meal_params
+        # なんか最適化できそう
+        if @meal.present?
+          destroy_ids = @meal.dishes.pluck(:id) - params[:dishes].pluck(:id).map(&:to_i)
+          if destroy_ids.present?
+            params[:dishes].concat(
+              destroy_ids.map do |id|
+                { id: id, _destroy: 1 }
+              end
+            )
           end
-          parmit_params = params.permit(:title, :description, :scene, :private, dishes: [:id, :title, :description, :full_size_image, :_destroy])
-          {
-            user: current_user,
-            title: parmit_params[:title],
-            description: parmit_params[:description],
-            scene: parmit_params[:scene],
-            # formData.append の仕様で文字列で送られてきてしまう
-            private: parmit_params[:private] == 'true',
-            dishes_attributes: parmit_params[:dishes]
-          }
         end
+        parmit_params = params.permit(:title, :description, :scene, :private, dishes: [:id, :title, :description, :full_size_image, :_destroy])
+        {
+          user: current_user,
+          title: parmit_params[:title],
+          description: parmit_params[:description],
+          scene: parmit_params[:scene],
+          # formData.append の仕様で文字列で送られてきてしまう
+          private: parmit_params[:private] == 'true',
+          dishes_attributes: parmit_params[:dishes]
+        }
+      end
 
-        def my_meal!
-          redirect_to root_path if @meal.user != current_user
-        end
+      def my_meal!
+        redirect_to root_path if @meal.user != current_user
+      end
     end
   end
 end
