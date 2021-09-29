@@ -12,6 +12,7 @@ class MealsController < ApplicationController
 
   # GET /meals/1 or /meals/1.json
   def show
+    render_404 if @meal.private && current_user != @meal.user
   end
 
   # GET /meals/new
