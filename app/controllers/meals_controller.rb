@@ -10,7 +10,7 @@ class MealsController < ApplicationController
   # 検索結果ページになる？
   def index
     @search_params = params
-    @meals = Meal.includes(dishes: { thumbnail_image_attachment: :blob }).release
+    @meals = Meal.includes(dishes: { thumbnail_image_attachment: :blob }).release.reverse
   end
 
   # GET /meals/1 or /meals/1.json

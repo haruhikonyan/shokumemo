@@ -2,6 +2,6 @@
 
 class TopController < ApplicationController
   def index
-    @meals = Meal.includes(dishes: { thumbnail_image_attachment: :blob }).release.limit(10)
+    @meals = Meal.includes(dishes: { thumbnail_image_attachment: :blob }).release.limit(10).reverse
   end
 end
