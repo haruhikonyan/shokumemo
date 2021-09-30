@@ -11,7 +11,11 @@ const NewMeal: React.VFC<Props> = ({sceneLabelAndValues}) => {
   const [dishImages, setDishImages] = useState<(File | undefined)[]>([])
   const [isAPIRequesting, setIsAPIRequesting] = useState<boolean>(false)
 
-  const methods = useForm<FormInputs>();
+  const methods = useForm<FormInputs>({
+    defaultValues: {
+      dishes: [{}],
+    }
+  });
 
   const onChangeDishFiles = useCallback((files: (File | undefined)[]) => {
     setDishImages(files);

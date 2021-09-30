@@ -39,12 +39,6 @@ const MealForm: React.VFC<Props> = ({dishImages, sceneLabelAndValues, onChangeDi
     keyName: 'key'
   });
 
-  useEffect(() => {
-    if(fields.length === 0) {
-      appendHandler();
-    }
-  }, [])
-
   const onChangeDishFile = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const files = [...dishImages]
     if (event.target.files == null || event.target.files.length === 0) {
