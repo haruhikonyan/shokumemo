@@ -31,6 +31,9 @@ class Meal < ApplicationRecord
   accepts_nested_attributes_for :dishes, allow_destroy: true
 
   scope :release, -> { where(private: false) }
+  scope :word_search, -> (word) {
+    joins(:dishes).where('meals.title LIKE :w OR meals.description LIKE :w OR dishes.title LIKE :w OR dishes.description LIKE :w', w: "%#{word}%").distinct
+  }
 
   enum scene: { unknown: 0, breakfast: 1, brunch: 2, runch: 3, dinner: 4, snack: 5, drink: 6, late_night_snack: 7, other: 99 }
 

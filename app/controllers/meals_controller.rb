@@ -7,10 +7,13 @@ class MealsController < ApplicationController
   before_action :my_meal!, only: %i(edit set_thumbnail_dish destroy)
 
   # GET /meals or /meals.json
-  # 検索結果ページになる？
+  # 暫定検索結果ページ
+  # 検索する単位は dish のほうがよさそう
   def index
     @search_params = params
-    @meals = Meal.includes(dishes: { thumbnail_image_attachment: :blob }).release.reverse
+
+    @meals = Meal.includes(dishes: { thumbnail_image_attachment: :blob }).order(updated_at: :desc)
+    @meals = @meals.word_search(@search_params[:keyword]) if @search_params[:keyword]
   end
 
   # GET /meals/1 or /meals/1.json
