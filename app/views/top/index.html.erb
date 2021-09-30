@@ -1,4 +1,12 @@
-<h1>最新の投稿</h1>
+
+<h1>トップページ</h1>
+<%= form_with(url: meals_path, method: :get, local: true) do |f| %>
+  <div class="input-group mb-3">
+    <%= f.text_field :keyword, placeholder: 'キーワード', class:'form-control' %>
+      <%= f.submit '検索', class: 'btn btn-outline-secondary'  %>
+  </div>
+<% end %>
+<h2>最新の投稿</h2>
 <div class="row">
   <% @meals.each do |meal| %>
     <div class="col-xs-12 col-md-4 mb-3">
