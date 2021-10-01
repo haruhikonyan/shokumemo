@@ -51,7 +51,7 @@ class MealsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_meal
-    @meal = Meal.find(params[:id])
+    @meal = Meal.includes(dishes: { thumbnail_image_attachment: :blob }).find(params[:id])
   end
 
   def set_is_my_meal
