@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef, createRef } from "react"
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faKeyboard } from '@fortawesome/free-solid-svg-icons'
@@ -26,12 +26,63 @@ const Thumbnail: React.VFC<{file?: File, defaultImageUrl?: string}> = ({file, de
   return imageUrl !== undefined ? <img src={imageUrl} className="img-fluid" /> : null
 }
 
+type ImageInputProps = {
+  file?: File;
+  thumbnailImageUrl?: string;
+  isInitialOpenCamera: boolean;
+  onChangeDishFile: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setIsInitialAddDish: (isInitialAddDish: boolean) => void;
+}
+const ImageInput: React.VFC<ImageInputProps> = ({file, thumbnailImageUrl, isInitialOpenCamera, onChangeDishFile, setIsInitialAddDish}) => {
+  const fileInputRef = useRef();
+  const labelRef = useRef();
+  useEffect(() => {
+    if (isInitialOpenCamera && thumbnailImageUrl === undefined ) {
+      fileInputRef.current.click();
+      setIsInitialAddDish(false);
+    }
+  }, [])
+
+  const fileChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (thumbnailImageUrl === undefined ) {
+      labelRef.current.scrollIntoView({block: 'center'});
+    }
+    onChangeDishFile(event);
+  }
+  return <>
+    <label className="form-label" ref={labelRef}>写真</label>
+    <label className="form-label ms-2">
+      <input
+        className="d-none"
+        type="file"
+        accept="image/*"
+        capture="camera"
+        onChange={(e) => fileChangeHandler(e)}
+        ref={fileInputRef}
+      />
+      <FontAwesomeIcon icon={faCamera} size="2x" />
+    </label>
+
+    <label className="form-label ms-2">
+      <input
+        className="d-none"
+        type="file"
+        accept="image/*"
+        onChange={(e) => fileChangeHandler(e)}
+      />
+      <FontAwesomeIcon icon={faFileImage} size="2x" />
+    </label>
+    <Thumbnail file={file} defaultImageUrl={thumbnailImageUrl} />
+  </>
+}
+
 type Props = {
   dishImages: (File | undefined)[];
   sceneLabelAndValues: sceneLabelAndValues;
+  isInitialAddDish?: boolean;
   onChangeDishFiles: (files: (File | undefined)[]) => void
 }
-const MealForm: React.VFC<Props> = ({dishImages, sceneLabelAndValues, onChangeDishFiles}) => {
+const MealForm: React.VFC<Props> = ({dishImages, sceneLabelAndValues, isInitialAddDish: propIsInitialAddDish = false, onChangeDishFiles}) => {
   const { register, control } = useFormContext<FormInputs>();
   const { fields, append, remove } = useFieldArray({
     control, // control props comes from useForm (optional: if you are using FormContext)
@@ -63,6 +114,14 @@ const MealForm: React.VFC<Props> = ({dishImages, sceneLabelAndValues, onChangeDi
     files.splice(index, 1)
     onChangeDishFiles(files)
   }
+  
+  const [isInitialAddDish, setIsInitialAddDish] = useState(propIsInitialAddDish)
+
+  useEffect(() => {
+    if (isInitialAddDish) {
+      appendHandler();
+    }
+  }, [])
 
   return (
     <>
@@ -108,28 +167,13 @@ const MealForm: React.VFC<Props> = ({dishImages, sceneLabelAndValues, onChangeDi
               />
             </div>
             <div className="mb-3">
-              <label className="form-label">写真</label>
-              <label className="form-label ms-2">
-                <input
-                  className="d-none"
-                  type="file"
-                  accept="image/*"
-                  capture="camera"
-                  onChange={(e) => onChangeDishFile(e, index)}
-                />
-                <FontAwesomeIcon icon={faCamera} size="2x" />
-              </label>
-
-              <label className="form-label ms-2">
-                <input
-                  className="d-none"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => onChangeDishFile(e, index)}
-                />
-                <FontAwesomeIcon icon={faFileImage} size="2x" />
-              </label>
-              <Thumbnail file={dishImages?.[index]} defaultImageUrl={field.thumbnailImageUrl} />
+              <ImageInput
+                file={dishImages?.[index]}
+                thumbnailImageUrl={field.thumbnailImageUrl}
+                isInitialOpenCamera={isInitialAddDish && (fields.length - 1) === index}
+                onChangeDishFile={(e) => onChangeDishFile(e, index)}
+                setIsInitialAddDish={setIsInitialAddDish}
+              />
             </div>
             <div className="mb-3">
               <label className="form-label">食べ物説明</label>

@@ -28,6 +28,7 @@ class MealsController < ApplicationController
 
   # GET /meals/1/edit
   def edit
+    @is_initial_add_dish = params[:is_initial_add_dish].present?
   end
 
   # POST /meals/1/thumbnail_dish

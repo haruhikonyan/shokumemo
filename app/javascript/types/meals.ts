@@ -6,7 +6,7 @@ export type Meal = {
   title: string;
   description: string;
   isPrivate: boolean;
-  thumbnail_dish_id?: number
+  thumbnail_dish_id?: number;
 }
 
 export type MealWithDishes = Meal & {

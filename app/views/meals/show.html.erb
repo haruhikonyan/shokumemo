@@ -16,6 +16,6 @@
   </div>
 <% end %>
 <% if @is_my_meal %>
-  <%= link_to '編集', edit_meal_path(@meal) %> |
+  <%= link_to '編集', edit_meal_path(@meal) %> | <%= link_to '写真を追加', edit_meal_path(@meal, is_initial_add_dish: true) %> |
 <% end %>
 <%= link_to '一覧へ戻る', meals_path %>
