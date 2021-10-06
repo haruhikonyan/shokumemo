@@ -20,6 +20,12 @@
 #  index_users_on_uid  (uid) UNIQUE
 #
 class User < ApplicationRecord
-  devise :registerable, :rememberable, :omniauthable, omniauth_providers: [:facebook, :twitter, :google, :line]
+  devise :registerable, :rememberable, :omniauthable, omniauth_providers: [:facebook, :twitter, :google_oauth2, :line]
   has_many :meals, dependent: :destroy
+
+  def self.from_omniauth(auth)
+    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+      user.email = auth.info.email
+    end
+  end
 end

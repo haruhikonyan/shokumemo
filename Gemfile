@@ -28,8 +28,9 @@ gem 'react-rails'
 gem 'devise'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
-gem 'omniauth-google'
+gem 'omniauth-google-oauth2'
 gem 'omniauth-line'
+gem 'omniauth-rails_csrf_protection'
 
 # Use Active Storage variant
 gem 'image_processing', '~> 1.2'
