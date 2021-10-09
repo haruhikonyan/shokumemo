@@ -31,7 +31,16 @@ class Dish < ApplicationRecord
   end
 
   def generate_thumbnail_image_and_attach
-    path = ImageProcessing::MiniMagick.source(ActiveStorage::Blob.service.send(:path_for, full_size_image.key)).resize_to_limit(800, 600).call.path
-    thumbnail_image.attach(io: File.open(path), filename: 'thumbnail_image.png')
+    case ENV['ACTIVE_STORAGE_SERVICE']
+    when 'local'
+      path = ImageProcessing::MiniMagick.source(ActiveStorage::Blob.service.send(:path_for, full_size_image.key)).resize_to_limit(800, 600).call.path
+      thumbnail_image.attach(io: File.open(path), filename: 'thumbnail_image.png')
+    when 'google'
+      # 保存済みのフルサイズを開いてそのファイルパスから圧縮をし、再度保存
+      full_size_image.open do |file|
+        path = ImageProcessing::MiniMagick.source(file.path).resize_to_limit(800, 600).call.path
+        thumbnail_image.attach(io: File.open(path), filename: 'thumbnail_image.png')
+      end
+    end
   end
 end
