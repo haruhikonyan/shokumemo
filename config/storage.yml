@@ -18,7 +18,7 @@ local:
 google:
   service: GCS
   project: <%= ENV['GCS_PROJECT'] %>
-  credentials: <%= Rails.root.join(ENV['GCS_CREDENTIALS_PATH']) %>
+  credentials: <%= ENV['GCS_CREDENTIALS_PATH'].present? && Rails.root.join(ENV['GCS_CREDENTIALS_PATH']) %>
   bucket: <%= ENV['GCS_BUCKET'] %>
 # Use rails credentials:edit to set the Azure Storage secret (as azure_storage:storage_access_key)
 # microsoft:

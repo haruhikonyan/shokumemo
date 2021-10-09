@@ -1,0 +1,9 @@
+.devcontainer
+credentials
+storage
+log
+tmp
+vendor/assets
+node_modules
+public/packs
+.git
