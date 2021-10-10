@@ -21,26 +21,11 @@
 #
 class Dish < ApplicationRecord
   belongs_to :meal
-  after_commit :generate_thumbnail_image_and_attach, if: -> { !thumbnail_image.attached? && full_size_image.attached? }
 
   has_one_attached :full_size_image
   has_one_attached :thumbnail_image
 
   after_save do
     thumbnail_image.purge if full_size_image.saved_change_to_checksum? && thumbnail_image.attached? && !thumbnail_image.saved_change_to_checksum?
-  end
-
-  def generate_thumbnail_image_and_attach
-    case ENV['ACTIVE_STORAGE_SERVICE']
-    when 'local'
-      path = ImageProcessing::MiniMagick.source(ActiveStorage::Blob.service.send(:path_for, full_size_image.key)).resize_to_limit(800, 600).call.path
-      thumbnail_image.attach(io: File.open(path), filename: 'thumbnail_image.png')
-    when 'google'
-      # 保存済みのフルサイズを開いてそのファイルパスから圧縮をし、再度保存
-      full_size_image.open do |file|
-        path = ImageProcessing::MiniMagick.source(file.path).resize_to_limit(800, 600).call.path
-        thumbnail_image.attach(io: File.open(path), filename: 'thumbnail_image.png')
-      end
-    end
   end
 end

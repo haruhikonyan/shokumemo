@@ -60,7 +60,7 @@ module Api
             )
           end
         end
-        parmit_params = params.permit(:title, :description, :scene, :private, dishes: [:id, :title, :description, :full_size_image, :_destroy])
+        parmit_params = params.permit(:title, :description, :scene, :private, dishes: [:id, :title, :description, :full_size_image, :thumbnail_image, :_destroy])
         {
           user: current_user,
           title: parmit_params[:title],

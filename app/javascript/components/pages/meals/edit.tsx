@@ -1,6 +1,8 @@
-import React, { useState, useCallback, useMemo } from "react"
+import React, { useState, useCallback } from "react"
 import axios from "axios";
 import { useForm, FormProvider } from "react-hook-form";
+
+import { compressor } from "~/utils/compressor";
 
 import { MealWithDishes, sceneLabelAndValues } from "~/types/meals";
 
@@ -11,41 +13,37 @@ const EditMeal: React.VFC<Props> = ({ meal, sceneLabelAndValues, isInitialAddDis
   const [dishImages, setDishImages] = useState<(File | undefined)[]>(meal.dishes.map(_ => undefined))
   const [isAPIRequesting, setIsAPIRequesting] = useState<boolean>(false)
 
-  const defaultValues = useMemo(() => {
-    if (isInitialAddDish) {
-      return { ...meal, dishes: [...meal.dishes, {}] }
-    }
-    else {
-      return { ...meal }
-    }
-  }, [])
-
   const methods = useForm<FormInputs>({
     defaultValues: { ...meal },
   });
 
   const onChangeDishFiles = useCallback((files: (File | undefined)[]) => {
     setDishImages(files);
-  }, [])
+  }, []);
 
   const onSubmit = async (data: FormInputs) => {
     setIsAPIRequesting(true);
 
     let formData = new FormData();
 
+
     if (data.title !== undefined) formData.append('title', data.title);
     if (data.description !== undefined) formData.append('description', data.description);
     formData.append('scene', data.scene);
     formData.append('private', data.isPrivate.toString());
-    data.dishes.forEach((dish, index) => {
+    for (const [index, dish] of data.dishes.entries()) {
       if (dish.id !== undefined) formData.append('dishes[]id', dish.id?.toString());
       if (dish.title !== undefined) formData.append('dishes[]title', dish.title);
       if (dish.description !== undefined) formData.append('dishes[]description', dish.description);
-      if (dishImages[index] !== undefined) formData.append('dishes[]full_size_image', dishImages[index], dishImages[index].name);
-    })
+      if (dishImages[index] !== undefined) {
+        formData.append('dishes[]full_size_image', dishImages[index], dishImages[index].name);
+        const thumbnailImage = await compressor(dishImages[index])
+        formData.append('dishes[]thumbnail_image', thumbnailImage, `thumbnail_${dishImages[index].name}`);
+      }
+    }
 
     const response = await axios.put(`/api/v1/meals/${meal.id}`, formData);
-    location.href = `/meals/${response.data.id}`
+    location.href = `/meals/${response.data.id}`;
   }
 
   return (
