@@ -31,4 +31,4 @@ RUN SECRET_KEY_BASE=placeholder bundle exec rails assets:precompile \
 
 EXPOSE 3000
 
-ENTRYPOINT ["bash", "-c", "bundle exec rails db:create db:migrate db:seed && bundle exec rails server -b 0.0.0.0]
+ENTRYPOINT ["sh", "-c", "bundle exec rails db:create db:migrate db:seed && bundle exec rails server -b 0.0.0.0"]
