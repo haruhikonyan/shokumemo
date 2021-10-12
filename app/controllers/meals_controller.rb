@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class MealsController < ApplicationController
-  before_action :authenticate_user!, only: %i(new edit set_thumbnail_dish destroy)
-  before_action :set_meal, only: %i(show edit destroy set_thumbnail_dish)
-  before_action :set_is_my_meal, only: %i(show edit set_thumbnail_dish destroy)
-  before_action :my_meal!, only: %i(edit set_thumbnail_dish destroy)
+  before_action :authenticate_user!, only: %i(new edit destroy)
+  before_action :set_meal, only: %i(show edit destroy)
+  before_action :set_is_my_meal, only: %i(show edit destroy)
+  before_action :my_meal!, only: %i(edit destroy)
 
   # GET /meals or /meals.json
   # 暫定検索結果ページ
@@ -29,17 +29,6 @@ class MealsController < ApplicationController
   # GET /meals/1/edit
   def edit
     @is_initial_add_dish = params[:is_initial_add_dish].present?
-  end
-
-  # POST /meals/1/thumbnail_dish
-  def set_thumbnail_dish
-    dish = Dish.find(params[:dish_id])
-    if @meal.dish_ids.include?(dish.id) && !dish.thumbnail_image.attached?
-      return redirect_to @meal, notice: "写真がありません"
-    end
-
-    @meal.update(thumbnail_dish: dish)
-    redirect_to @meal
   end
 
   # DELETE /meals/1 or /meals/1.json

@@ -6,7 +6,8 @@ export type Meal = {
   title: string;
   description: string;
   isPrivate: boolean;
-  thumbnail_dish_id?: number;
+  sceneLabel: string;
+  thumbnailDishId?: number;
 }
 
 export type MealWithDishes = Meal & {

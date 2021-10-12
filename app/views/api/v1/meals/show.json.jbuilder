@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-json.partial! "api/v1/meals/meal", meal: @meal
+json.partial! "models/meal", meal: @meal

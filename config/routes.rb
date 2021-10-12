@@ -16,16 +16,16 @@ Rails.application.routes.draw do
 
   # 仮 sucaffold そのまま置いている
   resources :dishes, only: [:index, :show, :new, :edit]
-  resources :meals, only: [:index, :show, :new, :edit, :destroy] do
-    member do
-      post :thumbnail_dish, to: 'meals#set_thumbnail_dish'
-    end
-  end
+  resources :meals, only: [:index, :show, :new, :edit, :destroy]
 
   namespace :api, defaults: { format: :json }  do
     namespace 'v1' do
       resources :dishes, only: [:create, :update, :destroy]
-      resources :meals, only: [:create, :update, :destroy]
+      resources :meals, only: [:create, :update, :destroy] do
+        member do
+          put :thumbnail_dish, to: 'meals#set_thumbnail_dish'
+        end
+      end
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

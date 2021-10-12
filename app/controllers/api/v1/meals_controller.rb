@@ -3,9 +3,10 @@
 module Api
   module V1
     class MealsController < ApplicationController
-      before_action :authenticate_user!, only: %i(create update destroy)
-      before_action :set_meal, only: %i(update destroy)
-      before_action :my_meal!, only: %i(update destroy)
+      before_action :authenticate_user!, only: %i(create update destroy set_thumbnail_dish)
+      before_action :set_meal, only: %i(update destroy set_thumbnail_dish)
+      before_action :set_is_my_meal, only: %i(update destroy set_thumbnail_dish)
+      before_action :my_meal!, only: %i(update destroy set_thumbnail_dish)
 
       # POST /meals or /meals.json
       def create
@@ -40,6 +41,21 @@ module Api
         end
       end
 
+      # PUT /meals/1/thumbnail_dish
+      def set_thumbnail_dish
+        dish = Dish.find(params[:dish_id])
+        if @meal.dish_ids.include?(dish.id) && !dish.thumbnail_image.attached?
+          # return redirect_to @meal, notice: "写真がありません"
+          return render json: {}, status: :unprocessable_entity
+        end
+    
+          if @meal.update(thumbnail_dish: dish)
+            render :show, status: :ok
+          else
+            render json: {}, status: :unprocessable_entity
+          end
+      end
+
       private
 
       # Use callbacks to share common setup or constraints between actions.
@@ -72,8 +88,12 @@ module Api
         }
       end
 
+      def set_is_my_meal
+        @is_my_meal = @meal.user == current_user
+      end
+    
       def my_meal!
-        redirect_to root_path if @meal.user != current_user
+        redirect_to root_path unless @is_my_meal
       end
     end
   end
