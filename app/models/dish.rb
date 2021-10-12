@@ -24,8 +24,4 @@ class Dish < ApplicationRecord
 
   has_one_attached :full_size_image
   has_one_attached :thumbnail_image
-
-  after_save do
-    thumbnail_image.purge if full_size_image.saved_change_to_checksum? && thumbnail_image.attached? && !thumbnail_image.saved_change_to_checksum?
-  end
 end
