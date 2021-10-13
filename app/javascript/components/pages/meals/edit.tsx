@@ -6,6 +6,7 @@ import { compressor } from "~/utils/compressor";
 
 import { MealWithDishes, sceneLabelAndValues } from "~/types/meals";
 
+import Loading from "@commons/Loading";
 import MealForm, { FormInputs } from "@commons/forms/MealForm";
 
 type Props = { meal: MealWithDishes, sceneLabelAndValues: sceneLabelAndValues, isInitialAddDish?: boolean }
@@ -48,6 +49,7 @@ const EditMeal: React.VFC<Props> = ({ meal, sceneLabelAndValues, isInitialAddDis
 
   return (
     <>
+      {isAPIRequesting && <Loading />}
       <h1>食メモ編集</h1>
       <FormProvider {...methods} >
         <form onSubmit={methods.handleSubmit(onSubmit)}>

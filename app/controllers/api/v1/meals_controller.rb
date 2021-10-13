@@ -13,6 +13,7 @@ module Api
         # なんか最適化できそう
         @meal = Meal.new(meal_params)
 
+        # TODO: respond_to 消して else には errors を返す
         respond_to do |format|
           if @meal.save
             format.json { render :show, status: :created, location: @meal }
