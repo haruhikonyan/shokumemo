@@ -20,7 +20,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json }  do
     namespace 'v1' do
-      resources :dishes, only: [:create, :update, :destroy]
+      resources :dishes, only: [:update]
       resources :meals, only: [:create, :update, :destroy] do
         member do
           put :thumbnail_dish, to: 'meals#set_thumbnail_dish'

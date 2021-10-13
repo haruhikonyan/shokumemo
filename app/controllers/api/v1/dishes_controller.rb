@@ -21,12 +21,10 @@ module Api
 
       # PATCH/PUT /api/v1/dishes/1 or /api/v1/dishes/1.json
       def update
-        respond_to do |format|
-          if @dish.update(dish_params)
-            format.json { render :show, status: :ok, location: @dish }
-          else
-            format.json { render json: @dish.errors, status: :unprocessable_entity }
-          end
+        if @dish.update(dish_params)
+          render :update, status: :ok
+        else
+          render json: @dish.errors, status: :unprocessable_entity
         end
       end
 
