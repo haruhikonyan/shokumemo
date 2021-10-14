@@ -8,7 +8,7 @@ import { MealWithDishes, sceneLabelAndValues } from "~/types/meals";
 
 export type FormInputs = MealWithDishes
 
-const Thumbnail: React.VFC<{file?: File, defaultImageUrl?: string}> = ({file, defaultImageUrl}) => {
+const Thumbnail: React.VFC<{ file?: File, defaultImageUrl?: string }> = ({ file, defaultImageUrl }) => {
   const [imageUrl, setImageUrl] = useState<string>(defaultImageUrl)
   useEffect(() => {
     if (file !== undefined) {
@@ -22,7 +22,7 @@ const Thumbnail: React.VFC<{file?: File, defaultImageUrl?: string}> = ({file, de
       setImageUrl(defaultImageUrl)
     }
   }, [file, defaultImageUrl])
-  
+
   return imageUrl !== undefined ? <img src={imageUrl} className="img-fluid" /> : null
 }
 
@@ -33,19 +33,19 @@ type ImageInputProps = {
   onChangeDishFile: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setIsInitialAddDish: (isInitialAddDish: boolean) => void;
 }
-const ImageInput: React.VFC<ImageInputProps> = ({file, thumbnailImageUrl, isInitialOpenCamera, onChangeDishFile, setIsInitialAddDish}) => {
+const ImageInput: React.VFC<ImageInputProps> = ({ file, thumbnailImageUrl, isInitialOpenCamera, onChangeDishFile, setIsInitialAddDish }) => {
   const fileInputRef = useRef();
   const labelRef = useRef();
   useEffect(() => {
-    if (isInitialOpenCamera && thumbnailImageUrl === undefined ) {
+    if (isInitialOpenCamera && thumbnailImageUrl === undefined) {
       fileInputRef.current.click();
       setIsInitialAddDish(false);
     }
   }, [])
 
   const fileChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (thumbnailImageUrl === undefined ) {
-      labelRef.current.scrollIntoView({block: 'center'});
+    if (thumbnailImageUrl === undefined) {
+      labelRef.current.scrollIntoView({ block: 'center' });
     }
     onChangeDishFile(event);
   }
@@ -82,7 +82,7 @@ type Props = {
   isInitialAddDish?: boolean;
   onChangeDishFiles: (files: (File | undefined)[]) => void
 }
-const MealForm: React.VFC<Props> = ({dishImages, sceneLabelAndValues, isInitialAddDish: propIsInitialAddDish = false, onChangeDishFiles}) => {
+const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitialAddDish: propIsInitialAddDish = false, onChangeDishFiles }) => {
   const { register, control } = useFormContext<FormInputs>();
   const { fields, append, remove } = useFieldArray({
     control, // control props comes from useForm (optional: if you are using FormContext)
@@ -114,7 +114,7 @@ const MealForm: React.VFC<Props> = ({dishImages, sceneLabelAndValues, isInitialA
     files.splice(index, 1)
     onChangeDishFiles(files)
   }
-  
+
   const [isInitialAddDish, setIsInitialAddDish] = useState(propIsInitialAddDish)
 
   useEffect(() => {
@@ -144,14 +144,23 @@ const MealForm: React.VFC<Props> = ({dishImages, sceneLabelAndValues, isInitialA
           }
         </select>
       </div>
-      <div className="mb-3">
-        <label className="form-label">説明</label>
-        <textarea
-          className="form-control"
-          rows={3}
-          placeholder="説明"
-          {...register("description")}
-        />
+      {/* TODO: 開閉を state 管理 */}
+      <p>
+        <a className="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#meal-description" role="button" aria-expanded="false" aria-controls="meal-description">
+          詳細を追加
+        </a>
+      </p>
+      {/* TODO: 場所追加 */}
+      <div className="collapse" id="meal-description">
+        <div className="mb-3">
+          <label className="form-label">説明</label>
+          <textarea
+            className="form-control"
+            rows={3}
+            placeholder="説明"
+            {...register("description")}
+          />
+        </div>
       </div>
 
       {fields.map((field, index) => {
@@ -175,14 +184,23 @@ const MealForm: React.VFC<Props> = ({dishImages, sceneLabelAndValues, isInitialA
                 setIsInitialAddDish={setIsInitialAddDish}
               />
             </div>
-            <div className="mb-3">
-              <label className="form-label">食べ物説明</label>
-              <textarea
-                className="form-control"
-                rows={3}
-                placeholder="説明"
-                {...register(`dishes.${index}.description` as const)}
-              />
+            {/* TODO: 開閉を state 管理 */}
+            <p>
+              <a className="btn btn-primary btn-sm" data-bs-toggle="collapse" href={`#description${index}`} role="button" aria-expanded="true" aria-controls={`description${index}`}>
+                詳細を追加
+              </a>
+            </p>
+            {/* TODO: タグ追加 */}
+            <div className="collapse" id={`description${index}`}>
+              <div className="mb-3">
+                <label className="form-label">食べ物説明</label>
+                <textarea
+                  className="form-control"
+                  rows={3}
+                  placeholder="説明"
+                  {...register(`dishes.${index}.description` as const)}
+                />
+              </div>
             </div>
             <button type="button" onClick={() => removeHandler(index)}
               className="btn btn-danger">
