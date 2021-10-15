@@ -126,6 +126,14 @@ const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitial
   return (
     <>
       <div className="mb-3">
+        <label className="form-label">日付</label>
+        <input
+          className="form-control"
+          type="date"
+          {...register("eatenAt")}
+        />
+      </div>
+      <div className="mb-3">
         <label className="form-label">タイトル</label>
         <input
           className="form-control"
@@ -150,15 +158,23 @@ const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitial
           詳細を追加
         </a>
       </p>
-      {/* TODO: 場所追加 */}
       <div className="collapse" id="meal-description">
         <div className="mb-3">
-          <label className="form-label">説明</label>
+          <label className="form-label">説明・感想</label>
           <textarea
             className="form-control"
             rows={3}
-            placeholder="説明"
+            placeholder="おいしかった"
             {...register("description")}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">場所</label>
+          <input
+            className="form-control"
+            type="text"
+            placeholder="居酒屋タベルバム"
+            {...register("location")}
           />
         </div>
       </div>

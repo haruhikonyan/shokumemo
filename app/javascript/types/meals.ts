@@ -3,8 +3,10 @@ import { Dish } from "./dishes";
 export type Meal = {
   id?: number;
   scene: string;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
+  eatenAt?: string;
+  location?: string;
   isPrivate: boolean;
   sceneLabel: string;
   thumbnailDishId?: number;

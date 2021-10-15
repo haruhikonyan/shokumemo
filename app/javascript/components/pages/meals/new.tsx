@@ -29,9 +29,12 @@ const NewMeal: React.VFC<Props> = ({ sceneLabelAndValues }) => {
 
     let formData = new FormData();
 
+    formData.append('eaten_at', data.eatenAt);
     if (data.title !== undefined) formData.append("title", data.title);
-    if (data.description !== undefined)
+    if (data.description !== undefined) {
       formData.append("description", data.description);
+    }
+    if (data.location !== undefined) formData.append('location', data.location);
     formData.append("scene", data.scene);
     formData.append("private", data.isPrivate.toString());
     for (const [index, dish] of data.dishes.entries()) {

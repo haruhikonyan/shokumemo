@@ -6,6 +6,8 @@
 #
 #  id                :bigint           not null, primary key
 #  description       :text(65535)
+#  eaten_at          :datetime
+#  location          :string(255)
 #  private           :boolean          default(FALSE), not null
 #  scene             :integer          default("unknown")
 #  title             :string(255)
