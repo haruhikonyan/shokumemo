@@ -1,11 +1,7 @@
 Rails.application.routes.draw do
   root to: 'top#index'
 
-  resources :login, only: [:index] do
-    collection do
-      post :kari_login
-    end
-  end
+  resources :login, only: [:index]
 
   resources :mypage, only: [:index]
   
@@ -15,7 +11,7 @@ Rails.application.routes.draw do
   end
 
   # 仮 sucaffold そのまま置いている
-  resources :dishes, only: [:index, :show, :new, :edit]
+  resources :dishes, only: [:index, :show]
   resources :meals, only: [:index, :show, :new, :edit, :destroy]
 
   namespace :api, defaults: { format: :json }  do

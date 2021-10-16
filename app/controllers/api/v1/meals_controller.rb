@@ -13,24 +13,19 @@ module Api
         # なんか最適化できそう
         @meal = Meal.new(meal_params)
 
-        # TODO: respond_to 消して else には errors を返す
-        respond_to do |format|
-          if @meal.save
-            format.json { render :show, status: :created, location: @meal }
-          else
-            format.json { render json: {}, status: :unprocessable_entity }
-          end
+        if @meal.save
+          render :show, status: :created, location: @meal
+        else
+          render json @meal.errors, status: :unprocessable_entity
         end
       end
 
       # PATCH/PUT /meals/1 or /meals/1.json
       def update
-        respond_to do |format|
-          if @meal.update(meal_params)
-            format.json { render :show, status: :ok, location: @meal }
-          else
-            format.html { render :edit, status: :unprocessable_entity }
-          end
+        if @meal.update(meal_params)
+          render :show, status: :ok, location: @meal
+        else
+          render json @meal.errors, status: :unprocessable_entity
         end
       end
 
@@ -46,15 +41,14 @@ module Api
       def set_thumbnail_dish
         dish = Dish.find(params[:dish_id])
         if @meal.dish_ids.include?(dish.id) && !dish.thumbnail_image.attached?
-          # return redirect_to @meal, notice: "写真がありません"
-          return render json: {}, status: :unprocessable_entity
+          return render json: { errors: '写真がありません' }, status: :unprocessable_entity
         end
     
-          if @meal.update(thumbnail_dish: dish)
-            render :show, status: :ok
-          else
-            render json: {}, status: :unprocessable_entity
-          end
+        if @meal.update(thumbnail_dish: dish)
+          render :show, status: :ok
+        else
+          render json: @meal.errors, status: :unprocessable_entity
+        end
       end
 
       private

@@ -10,12 +10,10 @@ module Api
       def create
         @dish = Dish.new(dish_params)
 
-        respond_to do |format|
-          if @dish.save
-            format.json { render :show, status: :created, location: @dish }
-          else
-            format.json { render json: @dish.errors, status: :unprocessable_entity }
-          end
+        if @dish.save
+          render :show, status: :created, location: @dish
+        else
+          render json: @dish.errors, status: :unprocessable_entity
         end
       end
 
