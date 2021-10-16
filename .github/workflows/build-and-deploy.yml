@@ -1,0 +1,40 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: build-and-deploy
+
+on:
+  push:
+    branches:
+    - stable
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+    - name: Configure docker to use the gcloud cli
+      run: gcloud auth configure-docker ${{ secrets.GCP_ARTIFACT_REPOSITORY_NAME }} --quiet
+    - name: Write master key
+      run: echo ${{ secrets.RAILS_MASTER_KEY }} > config/master.key
+    - name: Build a docker image
+      run: docker build -t ${{ secrets.GCP_ARTIFACT_REPOSITORY_NAME }}/${{ secrets.GCP_PROJECT_ID }}/shokumemo/shokumemo:latest -f Dockerfile.prod .
+    - name: Push the docker image
+      run: docker push ${{ secrets.GCP_ARTIFACT_REPOSITORY_NAME }}/${{ secrets.GCP_PROJECT_ID }}/shokumemo/shokumemo:latest
+    - name: Deploy to gce
+      run: |
+        gcloud compute ssh github-actions@tabelbum-prod --zone asia-northeast1-b -- docker pull ${{ secrets.GCP_ARTIFACT_REPOSITORY_NAME }}/${{ secrets.GCP_PROJECT_ID }}/shokumemo/shokumemo:latest
+        gcloud compute ssh github-actions@tabelbum-prod --zone asia-northeast1-b -- docker-compose -f ~tabelbum/shokumemo/docker-compose.prod.yml rm -sf rails
+        gcloud compute ssh github-actions@tabelbum-prod --zone asia-northeast1-b -- docker-compose -f ~tabelbum/shokumemo/docker-compose.prod.yml up -d rails
+        gcloud compute ssh github-actions@tabelbum-prod --zone asia-northeast1-b -- docker image prune -f
