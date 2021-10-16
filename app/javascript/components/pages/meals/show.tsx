@@ -67,8 +67,12 @@ const ShowMeal: React.VFC<Props> = ({ meal: initialMeal, isMyMeal }) => {
 
   return (
     <>
+      <div className="d-flex">
+        <small>{meal.eatenAt}</small>
+        <span className="badge bg-primary ms-auto">{meal.sceneLabel}</span>
+      </div>
       <h1>{displayTitle(meal.title)}</h1>
-      <span className="badge bg-primary float-end">{meal.sceneLabel}</span>
+      {meal.location !== undefined && meal.location !== '' && <p>{meal.location} にて</p>}
       <pre className="mt-2">{meal.description}</pre>
       <div className="row">
         {meal.dishes.map((dish) => {
