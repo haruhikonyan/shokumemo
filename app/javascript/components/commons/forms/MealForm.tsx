@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useRef, createRef } from "react"
+import React, { useEffect, useState, useRef, useMemo } from "react"
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera, faKeyboard } from '@fortawesome/free-solid-svg-icons'
+import { faCamera } from '@fortawesome/free-solid-svg-icons'
 import { faFileImage } from '@fortawesome/free-regular-svg-icons'
+import { Accordion } from 'react-bootstrap';
 
 import { MealWithDishes, sceneLabelAndValues } from "~/types/meals";
+import { isDefaultClause } from "typescript";
 
 export type FormInputs = MealWithDishes
 
@@ -83,7 +85,7 @@ type Props = {
   onChangeDishFiles: (files: (File | undefined)[]) => void
 }
 const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitialAddDish: propIsInitialAddDish = false, onChangeDishFiles }) => {
-  const { register, control } = useFormContext<FormInputs>();
+  const { register, control, getValues } = useFormContext<FormInputs>();
   const { fields, append, remove } = useFieldArray({
     control, // control props comes from useForm (optional: if you are using FormContext)
     name: "dishes", // unique name for your Field Array
@@ -123,6 +125,20 @@ const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitial
     }
   }, [])
 
+  const isDefaultActiveMealDetail = useMemo(() => {
+    const desc = getValues('description')
+    const location = getValues('location')
+    return (desc !== undefined && desc !== '') || (location !== undefined && location !== '')
+  }, []);
+
+  const isDefaultActiveDishDetailList = useMemo(() => {
+    const dishValues = getValues('dishes');
+    return dishValues.map((dish) => {
+      const desc = dish.description
+      return desc !== undefined && desc !== ''
+    });
+  }, []);
+
   return (
     <>
       <div className="mb-3">
@@ -152,32 +168,31 @@ const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitial
           }
         </select>
       </div>
-      {/* TODO: 開閉を state 管理 */}
-      <p>
-        <a className="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#meal-description" role="button" aria-expanded="false" aria-controls="meal-description">
-          詳細を追加
-        </a>
-      </p>
-      <div className="collapse" id="meal-description">
-        <div className="mb-3">
-          <label className="form-label">説明・感想</label>
-          <textarea
-            className="form-control"
-            rows={3}
-            placeholder="おいしかった"
-            {...register("description")}
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">場所</label>
-          <input
-            className="form-control"
-            type="text"
-            placeholder="居酒屋タベルバム"
-            {...register("location")}
-          />
-        </div>
-      </div>
+      <Accordion className="mb-3 ckm-meal-form-accordion" defaultActiveKey={isDefaultActiveMealDetail ? 'meal-detail' : ''}>
+        <Accordion.Item eventKey="meal-detail">
+          <Accordion.Header>詳細を編集</Accordion.Header>
+          <Accordion.Body>
+            <div className="mb-3">
+              <label className="form-label">説明・感想</label>
+              <textarea
+                className="form-control"
+                rows={3}
+                placeholder="おいしかった"
+                {...register("description")}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">場所</label>
+              <input
+                className="form-control"
+                type="text"
+                placeholder="居酒屋タベルバム"
+                {...register("location")}
+              />
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
 
       {fields.map((field, index) => {
         return (
@@ -200,24 +215,23 @@ const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitial
                 setIsInitialAddDish={setIsInitialAddDish}
               />
             </div>
-            {/* TODO: 開閉を state 管理 */}
-            <p>
-              <a className="btn btn-primary btn-sm" data-bs-toggle="collapse" href={`#description${index}`} role="button" aria-expanded="true" aria-controls={`description${index}`}>
-                詳細を追加
-              </a>
-            </p>
-            {/* TODO: タグ追加 */}
-            <div className="collapse" id={`description${index}`}>
-              <div className="mb-3">
-                <label className="form-label">食べ物説明</label>
-                <textarea
-                  className="form-control"
-                  rows={3}
-                  placeholder="説明"
-                  {...register(`dishes.${index}.description` as const)}
-                />
-              </div>
-            </div>
+            <Accordion className="mb-3 ckm-meal-form-accordion" defaultActiveKey={isDefaultActiveDishDetailList[index] ? 'dish-detail' : ''}>
+              <Accordion.Item eventKey="dish-detail">
+                <Accordion.Header>詳細を編集</Accordion.Header>
+                <Accordion.Body>
+                  {/* TODO: タグ追加 */}
+                  <div className="mb-3">
+                    <label className="form-label">食べ物説明・感想</label>
+                    <textarea
+                      className="form-control"
+                      rows={3}
+                      placeholder="ジューシーだった"
+                      {...register(`dishes.${index}.description` as const)}
+                    />
+                  </div>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
             <button type="button" onClick={() => removeHandler(index)}
               className="btn btn-danger">
               食べ物を削除
