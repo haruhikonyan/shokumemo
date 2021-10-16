@@ -42,7 +42,7 @@ const ShowDish: React.VFC<ShowDishProps> = ({ dish, isMyDish, isThumbnailDish, u
           : (
             <>
               {isMyDish && <button type="button" className="btn btn-info btn-sm mt-2" onClick={() => { setIsEditingDescription(true) }}>説明を編集</button>}
-              <pre className="mt-2">{dish.description}</pre>
+              <pre className="mt-2 skm-pre-wrap">{dish.description}</pre>
             </>
           )
       }
@@ -73,7 +73,7 @@ const ShowMeal: React.VFC<Props> = ({ meal: initialMeal, isMyMeal }) => {
       </div>
       <h1>{displayTitle(meal.title)}</h1>
       {meal.location !== undefined && meal.location !== '' && <p>{meal.location} にて</p>}
-      <pre className="mt-2">{meal.description}</pre>
+      <pre className="mt-2 skm-pre-wrap">{meal.description}</pre>
       <div className="row">
         {meal.dishes.map((dish) => {
           return (
@@ -83,7 +83,14 @@ const ShowMeal: React.VFC<Props> = ({ meal: initialMeal, isMyMeal }) => {
           )
         })}
       </div>
-      {isMyMeal && <><a href={`/meals/${meal.id}/edit`}>編集</a> | <a href={`/meals/${meal.id}/edit?is_initial_add_dish=true`}>写真を追加</a> | </>}
+      {isMyMeal && (
+        <div className="fixed-bottom skm-show-action-buttons">
+          <div className="p-2 bg-light">
+            <div className="text-center"><a href={`/meals/${meal.id}/edit`}>編集</a></div>
+            <div className="text-center"><a href={`/meals/${meal.id}/edit?is_initial_add_dish=true`}>写真を追加</a></div>
+          </div>
+        </div>
+      )}
       <a href="/meals">一覧へ戻る</a>
     </>
   )
