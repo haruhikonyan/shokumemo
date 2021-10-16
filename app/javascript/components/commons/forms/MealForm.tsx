@@ -232,10 +232,12 @@ const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitial
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>
-            <button type="button" onClick={() => removeHandler(index)}
-              className="btn btn-danger">
-              食べ物を削除
-            </button>
+            <div className="d-flex">
+              <button type="button" onClick={() => removeHandler(index)}
+                className="btn btn-danger ms-auto">
+                食べ物を削除
+              </button>
+            </div>
           </div>
         );
       })}
@@ -252,13 +254,15 @@ const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitial
           </label>
         </div>
       </div>
-      <button
-        type="button"
-        onClick={appendHandler}
-        className="btn btn-success"
-      >
-        食べ物を追加
-      </button>
+      <div className="d-grid gap-1 col-5 mx-auto">
+        <button
+          type="button"
+          onClick={appendHandler}
+          className="btn btn-success"
+        >
+          食べ物を追加
+        </button>
+      </div>
     </>
   )
 }
