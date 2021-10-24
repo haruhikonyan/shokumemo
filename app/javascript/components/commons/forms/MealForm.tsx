@@ -6,7 +6,6 @@ import { faFileImage } from '@fortawesome/free-regular-svg-icons'
 import { Accordion } from 'react-bootstrap';
 
 import { MealWithDishes, sceneLabelAndValues } from "~/types/meals";
-import { isDefaultClause } from "typescript";
 
 export type FormInputs = MealWithDishes
 
@@ -52,7 +51,7 @@ const ImageInput: React.VFC<ImageInputProps> = ({ file, thumbnailImageUrl, isIni
     onChangeDishFile(event);
   }
   return <>
-    <label className="form-label" ref={labelRef}>写真</label>
+    <label className="form-label" ref={labelRef}>写真(5メガまで)</label>
     <label className="form-label ms-2">
       <input
         className="d-none"
@@ -84,6 +83,9 @@ type Props = {
   isInitialAddDish?: boolean;
   onChangeDishFiles: (files: (File | undefined)[]) => void
 }
+// 5メガ制限
+// const SIZE_LIMIT = 1024 * 1024 * 5;
+const SIZE_LIMIT = 1024 * 1024 * 5;
 const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitialAddDish: propIsInitialAddDish = false, onChangeDishFiles }) => {
   const { register, control, getValues } = useFormContext<FormInputs>();
   const { fields, append, remove } = useFieldArray({
@@ -97,8 +99,13 @@ const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitial
     if (event.target.files == null || event.target.files.length === 0) {
       files[index] = undefined
     }
-    const file = event.target.files[0]
-    files[index] = file
+    else {
+      const file = event.target.files[0]
+      if (file.size > SIZE_LIMIT) {
+        return alert(`画像サイズは5MB以下になります。(${Math.floor(file.size / 1024 / 1024 * 100) / 100}メガ)`);
+      }
+      files[index] = file
+    }
     onChangeDishFiles(files)
   }
 
