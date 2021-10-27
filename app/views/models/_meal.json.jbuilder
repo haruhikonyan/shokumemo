@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.extract! meal, :id, :title, :description, :scene, :scene_label,:thumbnail_dish_id, :location
+json.extract! meal, :id, :title, :description, :scene, :scene_label, :thumbnail_dish_id, :location
 json.eaten_at meal.eaten_at&.strftime('%F')
 json.is_private meal.private
 json.dishes do
