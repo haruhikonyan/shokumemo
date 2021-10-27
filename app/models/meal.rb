@@ -32,6 +32,8 @@ class Meal < ApplicationRecord
   has_many :dishes, dependent: :destroy
   accepts_nested_attributes_for :dishes, allow_destroy: true
 
+  after_create :set_default_thumbnail_dish
+
   scope :release, -> { where(private: false) }
   scope :word_search, -> (word) {
     joins(:dishes).where('meals.title LIKE :w OR meals.description LIKE :w OR dishes.title LIKE :w OR dishes.description LIKE :w', w: "%#{word}%").distinct
@@ -42,7 +44,7 @@ class Meal < ApplicationRecord
   # TODO: ちょっと微妙 ヘルパーのがいいかな？
   def thumbnail_image
     # active storage で where ってどう使うの？
-    thumbnail_dish.present? ? thumbnail_dish.thumbnail_image : dishes.find { |d| d.thumbnail_image.attached? }.thumbnail_image
+    thumbnail_dish.present? ? thumbnail_dish.thumbnail_image : dishes.find { |d| d.thumbnail_image.attached? }&.thumbnail_image
   end
 
   # TODO: ゆくゆくは i18n
@@ -83,5 +85,13 @@ class Meal < ApplicationRecord
       %w(夜食 late_night_snack),
       %w(その他 other)
     ]
+  end
+
+  private
+
+  def set_default_thumbnail_dish
+    return if thumbnail_dish_id.present?
+    self.thumbnail_dish = dishes.first
+    save!
   end
 end
