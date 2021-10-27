@@ -16,7 +16,7 @@ module Api
         if @meal.save
           render :show, status: :created, location: @meal
         else
-          render json @meal.errors, status: :unprocessable_entity
+          render json: @meal.errors, status: :unprocessable_entity
         end
       end
 
@@ -25,7 +25,7 @@ module Api
         if @meal.update(meal_params)
           render :show, status: :ok, location: @meal
         else
-          render json @meal.errors, status: :unprocessable_entity
+          render json: @meal.errors, status: :unprocessable_entity
         end
       end
 
@@ -43,7 +43,7 @@ module Api
         if @meal.dish_ids.include?(dish.id) && !dish.thumbnail_image.attached?
           return render json: { errors: '写真がありません' }, status: :unprocessable_entity
         end
-    
+
         if @meal.update(thumbnail_dish: dish)
           render :show, status: :ok
         else
@@ -88,7 +88,7 @@ module Api
       def set_is_my_meal
         @is_my_meal = @meal.user == current_user
       end
-    
+
       def my_meal!
         redirect_to root_path unless @is_my_meal
       end
