@@ -9,6 +9,13 @@ import { sceneLabelAndValues } from "~/types/meals";
 import Loading from "@commons/Loading";
 import MealForm, { FormInputs } from "@commons/forms/MealForm";
 
+// TODO: 他で使うようなら共通化もしくはライブラリ入れる
+const formatDate = (date: Date) => {
+  const month = `00${date.getMonth() + 1}`.slice(-2);
+  const day = `00${date.getDate()}`.slice(-2);
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
 type Props = { sceneLabelAndValues: sceneLabelAndValues };
 const NewMeal: React.VFC<Props> = ({ sceneLabelAndValues }) => {
   const [dishImages, setDishImages] = useState<(File | undefined)[]>([]);
@@ -17,6 +24,7 @@ const NewMeal: React.VFC<Props> = ({ sceneLabelAndValues }) => {
   const methods = useForm<FormInputs>({
     defaultValues: {
       dishes: [{}],
+      eatenAt: formatDate(new Date())
     },
   });
 
