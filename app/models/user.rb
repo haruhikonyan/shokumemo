@@ -25,7 +25,9 @@ class User < ApplicationRecord
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+      # TODO: auth の種類によっては email は取れない気がするのでどうにか
       user.email = auth.info.email
+      user.display_name = '名無しタベルバマー'
     end
   end
 end
