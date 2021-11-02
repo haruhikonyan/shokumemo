@@ -18,12 +18,10 @@
 #
 # Indexes
 #
-#  index_meals_on_thumbnail_dish_id  (thumbnail_dish_id)
-#  index_meals_on_user_id            (user_id)
+#  index_meals_on_user_id  (user_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (thumbnail_dish_id => dishes.id)
 #  fk_rails_...  (user_id => users.id)
 #
 class Meal < ApplicationRecord
