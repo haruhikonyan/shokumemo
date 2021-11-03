@@ -10,6 +10,7 @@ export type Meal = {
   isPrivate: boolean;
   sceneLabel: string;
   thumbnailDishId?: number;
+  cardThumbnailImageUrl?: string
 }
 
 export type MealWithDishes = Meal & {
