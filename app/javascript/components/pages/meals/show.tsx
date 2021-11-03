@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import axios from "axios";
 import { useForm } from "react-hook-form";
 
@@ -62,17 +62,25 @@ const ShowMeal: React.VFC<Props> = ({ meal: initialMeal, isMyMeal }) => {
   const updaetDish = async (dish: Dish) => {
     const res = await axios.put<MealWithDishes>(`/api/v1/dishes/${dish.id}`, { description: dish.description });
     setMeal(res.data)
-
   }
+
+  const formatedDate = useMemo(() => {
+    const date = new Date(meal.eatenAt);
+    return `${date.getFullYear()}日${date.getMonth() + 1}月${date.getDate()}日`
+  }, [])
+
+  const desplayLocation = useMemo(() => {
+    return meal.location !== undefined && meal.location !== '' && `${meal.location} にて`
+  }, [])
 
   return (
     <>
       <div className="d-flex">
-        <small>{meal.eatenAt}</small>
+        <small>{meal.user.displayName} さん投稿</small>
         <span className="badge bg-primary ms-auto">{meal.sceneLabel}</span>
       </div>
       <h1>{displayTitle(meal.title)}</h1>
-      {meal.location !== undefined && meal.location !== '' && <p>{meal.location} にて</p>}
+      <small>{formatedDate} {desplayLocation}</small>
       <pre className="mt-2 skm-pre-wrap">{meal.description}</pre>
       <div className="row">
         {meal.dishes.map((dish) => {
