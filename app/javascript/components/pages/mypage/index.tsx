@@ -93,7 +93,7 @@ const Mypage: React.VFC<Props> = ({ user: initialUser, meals }) => {
           : (
             <>
               <p>表示名: {user.displayName}</p>
-              <p>メールアドレス: {user.email}</p>
+              <p>メールアドレス(非公開): {user.email}</p>
               <div>自己紹介:</div>
               <pre className="mt-2 skm-pre-wrap">{user.description}</pre>
               <div className="d-flex justify-content-sm-center">

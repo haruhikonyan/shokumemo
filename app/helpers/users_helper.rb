@@ -2,7 +2,7 @@
 
 module UsersHelper
   def user_meta_tags(user)
-    title = "タベルバム | #{user.display_name} さんの投稿一覧}"
+    title = "タベルバム | #{user.display_name} さんの投稿一覧"
     {
       titie: title,
       description: user.description,
