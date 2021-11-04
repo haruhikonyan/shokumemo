@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  def after_sign_in_path_for(resource)
+    mypage_index_path
+  end
+
   # rubocop:disable Naming/VariableNumber
   def _render_404(e = nil)
     logger.info "Rendering 404 with excaption: #{e.message}" if e
