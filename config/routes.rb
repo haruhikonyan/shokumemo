@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   # 仮 sucaffold そのまま置いている
   resources :dishes, only: [:index, :show]
   resources :meals, only: [:index, :show, :new, :edit, :destroy]
+  resources :users, only: [:show]
 
   namespace :api, defaults: { format: :json }  do
     namespace 'v1' do

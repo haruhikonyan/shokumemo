@@ -1,4 +1,5 @@
 import { Dish } from "./dishes";
+import { SecuredUser } from "./users";
 
 export type Meal = {
   id?: number;
@@ -10,7 +11,9 @@ export type Meal = {
   isPrivate: boolean;
   sceneLabel: string;
   thumbnailDishId?: number;
-  cardThumbnailImageUrl?: string
+  cardThumbnailImageUrl?: string;
+
+  user: SecuredUser;
 }
 
 export type MealWithDishes = Meal & {

@@ -5,6 +5,9 @@ json.extract! meal, :id, :title, :description, :scene, :scene_label, :thumbnail_
 json.eaten_at meal.eaten_at&.strftime('%F')
 json.is_private meal.private
 json.card_thumbnail_image_url meal.thumbnail_image.present? ? url_for(meal.thumbnail_image.variant(resize_to_fill: [480, 480]).processed) : nil
+json.user do
+  json.partial! "models/user", user: meal.user
+end
 json.dishes do
   json.array! meal.dishes do |dish|
     json.extract! dish, :id, :title, :description
