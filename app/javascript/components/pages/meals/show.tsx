@@ -76,7 +76,7 @@ const ShowMeal: React.VFC<Props> = ({ meal: initialMeal, isMyMeal }) => {
   return (
     <>
       <div className="d-flex">
-        <small>{meal.user.displayName} さん投稿</small>
+        <a href={`/users/${meal.user.id}`}>{meal.user.displayName} さん投稿</a>
         <span className="badge bg-primary ms-auto">{meal.sceneLabel}</span>
       </div>
       <h1>{displayTitle(meal.title)}</h1>
