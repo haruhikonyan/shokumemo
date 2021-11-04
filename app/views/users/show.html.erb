@@ -1,0 +1,11 @@
+<% set_meta_tags user_meta_tags(@user) %>
+<h1><%= @user.display_name %> さん</h1>
+<pre class="skm-pre-wrap"><%= @user.description %></pre>
+<h2>投稿一覧</h2>
+<div class="row">
+  <% @user.meals.each do |meal| %>
+    <div class="col-xs-12 col-md-4 mb-3">
+      <%= render partial: 'commons/meal_card', locals: { meal: meal }%>
+    </div>
+  <% end %>
+</div>

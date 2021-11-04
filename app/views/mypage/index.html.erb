@@ -1,14 +1,1 @@
-<h1>投稿一覧</h1>
-<div class="row">
-  <% @meals.each do |meal| %>
-    <div class="col-xs-12 col-md-4 mb-3">
-      <%= render partial: 'meals/meal_card', locals: { meal: meal }%>
-      <div class="d-flex justify-content-around">
-        <%= link_to '編集', edit_meal_path(meal), class: 'btn btn-secondary' %>
-        <%= link_to '削除', meal, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
-      </div>
-    </div>
-  <% end %>
-</div>
-
-<%= link_to '新規作成', new_meal_path, class: 'btn btn-primary' %>
+<%= react_component('pages/mypage/index', render(template: 'mypage/index.json')) %>

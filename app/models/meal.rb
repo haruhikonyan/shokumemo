@@ -18,12 +18,10 @@
 #
 # Indexes
 #
-#  index_meals_on_thumbnail_dish_id  (thumbnail_dish_id)
-#  index_meals_on_user_id            (user_id)
+#  index_meals_on_user_id  (user_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (thumbnail_dish_id => dishes.id)
 #  fk_rails_...  (user_id => users.id)
 #
 class Meal < ApplicationRecord
@@ -42,6 +40,7 @@ class Meal < ApplicationRecord
   enum scene: { unknown: 0, breakfast: 1, brunch: 2, runch: 3, dinner: 4, snack: 5, drink: 6, late_night_snack: 7, other: 99 }
 
   # TODO: ちょっと微妙 ヘルパーのがいいかな？
+  # TODO: thumbnail_dish 必ずあることにしたから改修
   def thumbnail_image
     # active storage で where ってどう使うの？
     thumbnail_dish.present? ? thumbnail_dish.thumbnail_image : dishes.find { |d| d.thumbnail_image.attached? }&.thumbnail_image
