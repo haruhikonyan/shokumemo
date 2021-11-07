@@ -27,23 +27,23 @@ jobs:
         ruby-version: 2.7
         bundler-cache: true
 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "16"
-          cache: "yarn"
+    - uses: actions/setup-node@v2
+      with:
+        node-version: "16"
+        cache: "yarn"
 
-      - name: Yarn install
-        run: yarn install
+    - name: Yarn install
+      run: yarn install
 
-      - name: Yarn test
-        run: yarn test
+    - name: Yarn test
+      run: yarn test
 
-      # - name: Setup database
-      #   run: bundle exec rails db:create
-      #   run: bundle exec rails db:migrate
+    # - name: Setup database
+    #   run: bundle exec rails db:create
+    #   run: bundle exec rails db:migrate
 
-      - name: Run RuboCop
-        run: bundle exec rubocop
+    - name: Run RuboCop
+      run: bundle exec rubocop
 
-      - name: Run RSpec
-        run: bundle exec rspec spec
+    - name: Run RSpec
+      run: bundle exec rspec spec
