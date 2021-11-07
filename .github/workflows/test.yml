@@ -41,8 +41,9 @@ jobs:
     #   run: yarn test
 
     - name: Setup database
-      run: bundle exec rails db:create
-      run: bundle exec rails db:migrate
+      run: bundle exec rails db:setup
+      # run: bundle exec rails db:create
+      # run: bundle exec rails db:migrate
 
     # - name: Run RuboCop
     #   run: bundle exec rubocop
