@@ -35,8 +35,8 @@ jobs:
     - name: Yarn install
       run: yarn install
 
-    - name: Yarn test
-      run: yarn test
+    # - name: Yarn test
+    #   run: yarn test
 
     # - name: Setup database
     #   run: bundle exec rails db:create
