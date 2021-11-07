@@ -5,6 +5,9 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['2.7']
 
     # services:
     #   mysql:
@@ -24,7 +27,7 @@ jobs:
 
     - uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.7
+        ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true
 
     - uses: actions/setup-node@v2
