@@ -36,6 +36,7 @@ class Meal < ApplicationRecord
   scope :word_search, -> (word) {
     joins(:dishes).where('meals.title LIKE :w OR meals.description LIKE :w OR dishes.title LIKE :w OR dishes.description LIKE :w', w: "%#{word}%").distinct
   }
+  scope :filter_date_by, -> (start_date, end_date) { where(created_at: start_date..end_date) }
 
   enum scene: { unknown: 0, breakfast: 1, brunch: 2, runch: 3, dinner: 4, snack: 5, drink: 6, late_night_snack: 7, other: 99 }
 
