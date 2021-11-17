@@ -25,7 +25,7 @@ type FilterQuery = { startDate: string, endDate: string, scene: string, searchWo
 const MyMeals: React.VFC<{ meals: MealWithDishes[], filterQuery: FilterQuery, sceneLabelAndValues: sceneLabelAndValues, deleteMealHundler: (meal: MealWithDishes) => void }> = ({ meals, filterQuery, sceneLabelAndValues, deleteMealHundler }) => {
   const [displayMeals, setDesplayMeals] = useState(meals);
   const { register, handleSubmit, watch } = useForm<FilterQuery>({
-    defaultValues: { scene: 'all', ...filterQuery },
+    defaultValues: { ...filterQuery, scene: filterQuery.scene != null ? filterQuery.scene : 'all' },
   });
 
   const searchWord = watch('searchWord');
@@ -43,8 +43,7 @@ const MyMeals: React.VFC<{ meals: MealWithDishes[], filterQuery: FilterQuery, sc
   }, [searchWord, scene])
 
   const onSubmitDate = (data: FilterQuery) => {
-    console.log(data);
-    location.href = `/mypage?start_date=${data.startDate}&end_date=${data.endDate}&search_word=${data.searchWord}&scene=${data.scene}`;
+    location.href = `/mypage?start_date=${data.startDate}&end_date=${data.endDate}&search_word=${data.searchWord ?? ''}&scene=${data.scene}`;
   }
 
   return (
