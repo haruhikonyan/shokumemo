@@ -39,8 +39,11 @@ jobs:
 
     - name: Setup database
       run: |
-        sudo chown mysql:mysql mysql_upgrade_info
+        systemctl status mysql.service
+        journalctl -xe
         sudo /etc/init.d/mysql start
+        systemctl status mysql.service
+        journalctl -xe
         bundle exec rails db:create
         bundle exec rails db:migrate
 
