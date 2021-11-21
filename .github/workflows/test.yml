@@ -16,10 +16,6 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: shokumemo
-          MYSQL_USER: root
-          MYSQL_PASSWORD: password
-          # MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
@@ -41,23 +37,14 @@ jobs:
     - name: Yarn install
       run: yarn install
 
-    # - name: Yarn test
-    #   run: yarn test
+    - name: Create database
+      run: bundle exec rails db:create
 
-    - name: Setup database
-      run: bundle exec rake db:create db:schema:load
+    - name: Migrate database
+      run: bundle exec rails db:migrate
 
-    # - name: Create database
-    #   run: bundle exec rails db:create
-
-    # - name: Migrate database
-    #   run: bundle exec rails db:migrate
-
-    # - name: Setup database
-    #   run: bundle exec rails db:setup
-
-    # - name: Run RuboCop
-    #   run: bundle exec rubocop
+    - name: Run RuboCop
+      run: bundle exec rubocop
 
     - name: Run RSpec
       run: bundle exec rspec spec
