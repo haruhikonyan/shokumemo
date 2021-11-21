@@ -17,7 +17,6 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_USER: root
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
