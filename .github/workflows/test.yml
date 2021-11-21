@@ -39,11 +39,8 @@ jobs:
 
     - name: Setup database
       run: |
-        systemctl status mysql.service
-        journalctl -xe
+        cp config/database.yml.ci config/database.yml
         sudo /etc/init.d/mysql start
-        systemctl status mysql.service
-        journalctl -xe
         bundle exec rails db:create
         bundle exec rails db:migrate
 
