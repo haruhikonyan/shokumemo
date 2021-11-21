@@ -16,6 +16,8 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: password
+          MYSQL_USER: root
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
         options: >-
           --health-cmd "mysqladmin ping"
           --health-interval 10s
@@ -40,8 +42,6 @@ jobs:
     - name: Setup database
       run: |
         sudo /etc/init.d/mysql start
-        sudo journalctl -xe
-        sudo less /var/log/mysql/error.log
         bundle exec rails db:create
         bundle exec rails db:migrate
 
