@@ -40,6 +40,7 @@ jobs:
     - name: Setup database
       run: |
         sudo /etc/init.d/mysql start
+        sudo chown mysql:mysql mysql_upgrade_info
         bundle exec rails db:create
         bundle exec rails db:migrate
 
