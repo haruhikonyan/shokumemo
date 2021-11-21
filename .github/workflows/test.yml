@@ -43,6 +43,8 @@ jobs:
         sudo /etc/init.d/mysql start
         bundle exec rails db:create
         bundle exec rails db:migrate
+      env:
+        RAILS_ENV: test
 
     - name: Run RuboCop
       run: bundle exec rubocop
