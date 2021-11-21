@@ -37,11 +37,11 @@ jobs:
     - name: Yarn install
       run: yarn install
 
-    - name: Create database
-      run: bundle exec rails db:create
-
-    - name: Migrate database
-      run: bundle exec rails db:migrate
+    - name: Setup database
+      run: |
+        sudo /etc/init.d/mysql start
+        bundle exec rails db:create
+        bundle exec rails db:migrate
 
     - name: Run RuboCop
       run: bundle exec rubocop
