@@ -7,6 +7,8 @@ import { displayTitle } from "~/utils/stirng";
 import { User } from "~/types/users";
 import { MealWithDishes, sceneLabelAndValues } from "~/types/meals";
 
+import Loading from "@commons/Loading";
+
 const MealCard: React.VFC<{ meal: MealWithDishes }> = ({ meal }) => {
   return (
     <a href={`/meals/${meal.id}`} className="card">
@@ -39,7 +41,7 @@ const MyMeals: React.VFC<{ meals: MealWithDishes[], filterQuery: FilterQuery, sc
     if (searchWord) {
       filteredMeals = filteredMeals.filter(m => m.title?.includes(searchWord) || m.description?.includes(searchWord) || m.location?.includes(searchWord));
     }
-    setDesplayMeals(filteredMeals)
+    setDesplayMeals(filteredMeals);
   }, [searchWord, scene])
 
   const onSubmitDate = (data: FilterQuery) => {
@@ -121,6 +123,7 @@ type FormInputs = Pick<User, 'email' | 'displayName' | 'description'>
 type Props = { user: User, meals: MealWithDishes[], filterQuery: FilterQuery, sceneLabelAndValues: sceneLabelAndValues }
 const Mypage: React.VFC<Props> = ({ user: initialUser, meals, filterQuery, sceneLabelAndValues }) => {
   const [user, setUser] = useState(initialUser);
+  const [isAPIRequesting, setIsAPIRequesting] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState(false);
   const { register, handleSubmit, reset } = useForm<FormInputs>({
     defaultValues: { ...user },
@@ -140,12 +143,14 @@ const Mypage: React.VFC<Props> = ({ user: initialUser, meals, filterQuery, scene
   const deleteMealHundler = async (meal: MealWithDishes) => {
     const response = confirm(`${displayTitle(meal.title)}(${meal.dishes.length}皿の食べ物)を削除します。`);
     if (response) {
+      setIsAPIRequesting(true);
       await axios.delete(`/api/v1/meals/${meal.id}`);
-      location.reload;
+      location.reload();
     }
   }
   return (
     <>
+      {isAPIRequesting && <Loading />}
       {
         isEditing
           ? (

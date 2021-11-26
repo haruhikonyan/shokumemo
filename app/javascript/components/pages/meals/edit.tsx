@@ -51,7 +51,7 @@ const EditMeal: React.VFC<Props> = ({ meal, sceneLabelAndValues, isInitialAddDis
   return (
     <>
       {isAPIRequesting && <Loading />}
-      <h1>食メモ編集</h1>
+      <h1>編集</h1>
       <FormProvider {...methods} >
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <MealForm dishImages={dishImages} sceneLabelAndValues={sceneLabelAndValues} isInitialAddDish={isInitialAddDish} onChangeDishFiles={onChangeDishFiles} />
