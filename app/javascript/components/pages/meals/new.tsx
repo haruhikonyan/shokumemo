@@ -73,7 +73,7 @@ const NewMeal: React.VFC<Props> = ({ sceneLabelAndValues }) => {
   return (
     <>
       {isAPIRequesting && <Loading />}
-      <h1>食メモ新規作成</h1>
+      <h1>新規投稿</h1>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <MealForm
