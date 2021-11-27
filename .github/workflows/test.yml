@@ -1,13 +1,18 @@
 name: Test
 
-on: push
+on:
+  push:
+    branches-ignore: [stable]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ruby-version: ['2.7']
+
+    env:
+      RAILS_ENV: test
+      DATABASE_USER: root
+      DATABASE_PASSWORD: password
+      DATABASE_HOST: 127.0.0.1
 
     services:
       mysql:
@@ -25,21 +30,22 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+    - uses: ruby/setup-ruby@v1
       with:
+        ruby-version: 2.7.2
         bundler-cache: true
 
     - uses: actions/setup-node@v2
       with:
         node-version: "16"
         cache: "yarn"
+        cache-dependency-path: yarn.lock
 
     - name: Yarn install
       run: yarn install
 
     - name: Setup database
       run: |
-        cp config/database.yml.ci config/database.yml
         bundle exec rails db:create
         bundle exec rails db:migrate
 
