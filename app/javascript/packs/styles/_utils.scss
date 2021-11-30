@@ -1,4 +1,13 @@
+@import 'bootstrap/scss/bootstrap.scss';
+
 .skm-pre-wrap {
   white-space: pre-wrap;
   overflow-wrap: break-word;
+}
+
+// TODO: skm-small-date-picker がついてる時だけにしたいけど shadow dom とかよくわからない
+input[type="date"]::-webkit-calendar-picker-indicator {
+  @include media-breakpoint-down(sm) {
+    margin-left: 0;
+  }
 }

@@ -4,14 +4,11 @@ module ApplicationHelper
   def default_meta_tags
     description = '誰でも簡単日々の食事投稿ができるタベルバム。旅行先やレストランでの一品をすぐにアップロードし自分だけの食べ物アルバム(タベルバム)を作成！'
     {
-      site: 'タベルバム',
       title: 'タベルバム',
-      reverse: true,
       charset: 'utf-8',
       description: description,
       keywords: 'タベルバム, tabelbum, たべるばむ, taberubamu',
       canonical: request.original_url,
-      separator: '&mdash;".html_safe',
       icon: [
         { href: image_url('favicon.ico') }
         # { href: image_url('icon.jpg'), rel: 'apple-touch-icon', sizes: '180x180', type: 'image/jpg' },
