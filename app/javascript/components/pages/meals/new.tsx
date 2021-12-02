@@ -65,9 +65,20 @@ const NewMeal: React.VFC<Props> = ({ sceneLabelAndValues }) => {
         formData.append('dishes[]thumbnail_image', thumbnailImage, `thumbnail_${dishImages[index].name}`);
       }
     };
+    data.tags.forEach(tag => {
+      if (tag.id !== undefined) {
+        formData.append("tags[]id", tag.id);
+      }
+      formData.append("tags[]name", tag.name);
+    })
 
-    const response = await axios.post("/api/v1/meals", formData);
-    location.href = `/meals/${response.data.id}`;
+    try {
+      const response = await axios.post("/api/v1/meals", formData);
+      location.href = `/meals/${response.data.id}`;
+    } catch (error) {
+      console.log(error);
+      setIsAPIRequesting(false);
+    }
   };
 
   return (

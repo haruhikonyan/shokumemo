@@ -71,7 +71,7 @@ module Api
             )
           end
         end
-        parmit_params = params.permit(:title, :description, :scene, :private, :eaten_at, :location, dishes: [:id, :title, :description, :full_size_image, :thumbnail_image, :_destroy])
+        parmit_params = params.permit(:title, :description, :scene, :private, :eaten_at, :location, dishes: [:id, :title, :description, :full_size_image, :thumbnail_image, :_destroy], tags: [:id, :name])
         {
           user: current_user,
           eaten_at: parmit_params[:eaten_at],
@@ -81,7 +81,8 @@ module Api
           scene: parmit_params[:scene],
           # formData.append の仕様で文字列で送られてきてしまう
           private: parmit_params[:private] == 'true',
-          dishes_attributes: parmit_params[:dishes]
+          dishes_attributes: parmit_params[:dishes],
+          tags_attributes: parmit_params[:tags]
         }
       end
 
