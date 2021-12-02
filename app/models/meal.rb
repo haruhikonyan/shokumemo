@@ -9,7 +9,7 @@
 #  eaten_at          :datetime
 #  location          :string(255)
 #  private           :boolean          default(FALSE), not null
-#  scene             :integer          default("unknown")
+#  scene             :integer          default(0)
 #  title             :string(255)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
@@ -29,6 +29,10 @@ class Meal < ApplicationRecord
   belongs_to :thumbnail_dish, class_name: 'Dish', optional: true
   has_many :dishes, dependent: :destroy
   accepts_nested_attributes_for :dishes, allow_destroy: true
+
+  has_many :meal_tags
+  has_many :tags, through: :meal_tags
+  accepts_nested_attributes_for :tags, allow_destroy: true
 
   after_create :set_default_thumbnail_dish
 
