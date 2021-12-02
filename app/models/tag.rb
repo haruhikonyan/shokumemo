@@ -5,9 +5,9 @@
 # Table name: tags
 #
 #  id          :bigint           not null, primary key
-#  count       :integer
-#  display_top :boolean
-#  name        :string(255)
+#  count       :integer          default(0), not null
+#  display_top :boolean          default(FALSE), not null
+#  name        :string(255)      not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #

@@ -9,7 +9,7 @@
 #  eaten_at          :datetime
 #  location          :string(255)
 #  private           :boolean          default(FALSE), not null
-#  scene             :integer          default(0)
+#  scene             :integer          default("unknown")
 #  title             :string(255)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null

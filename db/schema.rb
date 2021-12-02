@@ -73,9 +73,9 @@ ActiveRecord::Schema.define(version: 2021_12_01_062229) do
   end
 
   create_table "tags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "name"
-    t.integer "count"
-    t.boolean "display_top"
+    t.string "name", null: false
+    t.integer "count", default: 0, null: false
+    t.boolean "display_top", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
