@@ -66,7 +66,7 @@ const ShowMeal: React.VFC<Props> = ({ meal: initialMeal, isMyMeal }) => {
 
   const formatedDate = useMemo(() => {
     const date = new Date(meal.eatenAt);
-    return `${date.getFullYear()}日${date.getMonth() + 1}月${date.getDate()}日`
+    return `${date.getFullYear()}日${date.getMonth() + 1}月${date.getDate()}日`;
   }, [])
 
   const desplayLocation = useMemo(() => {
@@ -76,9 +76,10 @@ const ShowMeal: React.VFC<Props> = ({ meal: initialMeal, isMyMeal }) => {
   return (
     <>
       <div className="d-flex">
-        <a href={`/users/${meal.user.id}`}>{meal.user.displayName} さん投稿</a>
+        {meal.tags.map(tag => <span key={tag.id} className="badge bg-success me-2">{tag.name}</span>)}
         <span className="badge bg-primary ms-auto">{meal.sceneLabel}</span>
       </div>
+      <a href={`/users/${meal.user.id}`}>{meal.user.displayName} さん投稿</a>
       <h1>{displayTitle(meal.title)}</h1>
       <small>{formatedDate} {desplayLocation}</small>
       <pre className="mt-2 skm-pre-wrap">{meal.description}</pre>
