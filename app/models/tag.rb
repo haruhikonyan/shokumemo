@@ -14,4 +14,9 @@
 class Tag < ApplicationRecord
   has_many :meal_tags
   has_many :meals, through: :meal_tags
+
+  scope :search, -> (word) {
+    return Tag.none if word.blank?
+    where('name LIKE :w', w: "%#{word}%")
+  }
 end

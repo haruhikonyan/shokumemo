@@ -6,6 +6,10 @@ module Api
     class TagsController < ApplicationController
       before_action :set_tag, only: %i(update destroy)
 
+      def search
+        @tags = Tag.search(params[:search_word])
+      end
+
       # POST /api/v1/tages or /api/v1/tages.json
       def create
         @tag = Tag.new(tag_params)
