@@ -15,3 +15,8 @@ json.dishes do
     json.thumbnail_image_url url_for(dish.thumbnail_image) if dish.thumbnail_image.attached?
   end
 end
+json.tags do
+  json.array! meal.tags do |tag|
+    json.partial! "models/tag", tag: tag
+  end
+end

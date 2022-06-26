@@ -28,6 +28,11 @@ Rails.application.routes.draw do
           put :thumbnail_dish, to: 'meals#set_thumbnail_dish'
         end
       end
+      resources :tags, only: [] do
+        collection do
+          get :search, to: 'tags#search'
+        end
+      end
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

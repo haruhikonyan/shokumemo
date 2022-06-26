@@ -1,5 +1,5 @@
-FROM node:16.8.0 as node
-FROM ruby:2.7.2
+FROM amd64/node:16.8.0 as node
+FROM amd64/ruby:2.7.2
 
 WORKDIR /app
 

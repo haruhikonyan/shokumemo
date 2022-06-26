@@ -1,4 +1,5 @@
 import { Dish } from "./dishes";
+import { Tag } from "./tags";
 import { SecuredUser } from "./users";
 
 export type Meal = {
@@ -13,6 +14,7 @@ export type Meal = {
   thumbnailDishId?: number;
   cardThumbnailImageUrl?: string;
 
+  tags: Tag[];
   user: SecuredUser;
 }
 

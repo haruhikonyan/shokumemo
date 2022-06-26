@@ -9,6 +9,33 @@ import { MealWithDishes, sceneLabelAndValues } from "~/types/meals";
 
 export type FormInputs = MealWithDishes
 
+const TagForm: React.VFC<{}> = () => {
+  const { register, control, getValues } = useFormContext<FormInputs>();
+  const { fields, append, remove } = useFieldArray({
+    control, // control props comes from useForm (optional: if you are using FormContext)
+    name: "tags", // unique name for your Field Array
+    keyName: 'key'
+  });
+  return (
+    <>
+      {fields.map((field, index) => {
+        return (
+          <>
+            <input
+              className="form-control"
+              type="text"
+              placeholder="タグ名"
+              {...register(`tags.${index}.name` as const)}
+            />
+            <button type="button" onClick={() => remove(index)}>×</button>
+          </>
+        );
+      })}
+      <button type="button" onClick={() => append({})}>＋</button>
+    </>
+  )
+}
+
 const Thumbnail: React.VFC<{ file?: File, defaultImageUrl?: string }> = ({ file, defaultImageUrl }) => {
   const [imageUrl, setImageUrl] = useState<string>(defaultImageUrl)
   useEffect(() => {
@@ -179,6 +206,11 @@ const MealForm: React.VFC<Props> = ({ dishImages, sceneLabelAndValues, isInitial
         <Accordion.Item eventKey="meal-detail">
           <Accordion.Header>詳細を編集</Accordion.Header>
           <Accordion.Body>
+
+            <div className="mb-3">
+              <label className="form-label">タグ</label>
+              <TagForm />
+            </div>
             <div className="mb-3">
               <label className="form-label">説明・感想</label>
               <textarea

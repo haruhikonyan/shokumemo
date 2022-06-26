@@ -41,3 +41,5 @@ yarn-debug.log*
 
 .env
 docker-compose.prod.yml
+
+.devcontainer/Dockerfile
