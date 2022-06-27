@@ -30,6 +30,10 @@ class Meal < ApplicationRecord
   has_many :dishes, dependent: :destroy
   accepts_nested_attributes_for :dishes, allow_destroy: true
 
+  has_many :meal_tags
+  has_many :tags, through: :meal_tags
+  accepts_nested_attributes_for :tags, allow_destroy: true
+
   after_create :set_default_thumbnail_dish
 
   scope :release, -> { where(private: false) }

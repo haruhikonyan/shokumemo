@@ -42,11 +42,22 @@ const EditMeal: React.VFC<Props> = ({ meal, sceneLabelAndValues, isInitialAddDis
         const thumbnailImage = await compressor(dishImages[index])
         formData.append('dishes[]thumbnail_image', thumbnailImage, `thumbnail_${dishImages[index].name}`);
       }
-    }
+    };
+    data.tags.forEach(tag => {
+      if (tag.id !== undefined) {
+        formData.append("tags[]id", tag.id);
+      }
+      formData.append("tags[]name", tag.name);
+    })
 
+    try {
     const response = await axios.put(`/api/v1/meals/${meal.id}`, formData);
     location.href = `/meals/${response.data.id}`;
-  }
+  }catch (error) {
+      console.log(error);
+      setIsAPIRequesting(false);
+    }
+  };
 
   return (
     <>
