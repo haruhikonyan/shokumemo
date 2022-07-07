@@ -1,0 +1,67 @@
+name: Test
+
+on:
+  push:
+    branches-ignore: [stable]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      RAILS_ENV: test
+      DATABASE_USER: root
+      DATABASE_PASSWORD: password
+      DATABASE_HOST: 127.0.0.1
+
+    services:
+      mysql:
+        image: mysql:8.0.26
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.2
+        bundler-cache: true
+
+    - uses: actions/setup-node@v2
+      with:
+        node-version: "16"
+        cache: "yarn"
+        cache-dependency-path: yarn.lock
+
+    - name: Yarn install
+      run: yarn install
+
+    - name: Setup database
+      run: |
+        bundle exec rails db:create
+        bundle exec rails db:migrate
+
+    - name: Run RuboCop
+      run: bundle exec rubocop
+
+    - name: Run RSpec
+      run: bundle exec rspec spec
+
+    - name: Notify test
+      uses: 8398a7/action-slack@v3.8.0
+      with:
+        status: ${{ job.status }}
+        author_name: CI Results
+        fields: repo, message, author, action, job, took, ref, workflow
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()

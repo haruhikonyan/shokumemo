@@ -38,3 +38,13 @@ jobs:
         gcloud compute ssh github-actions@tabelbum-prod --zone asia-northeast1-b -- docker-compose -f ~tabelbum/shokumemo/docker-compose.prod.yml rm -sf rails
         gcloud compute ssh github-actions@tabelbum-prod --zone asia-northeast1-b -- docker-compose -f ~tabelbum/shokumemo/docker-compose.prod.yml up -d rails
         gcloud compute ssh github-actions@tabelbum-prod --zone asia-northeast1-b -- docker image prune -f
+    - name: Notify deploy
+      uses: 8398a7/action-slack@v3.8.0
+      with:
+        status: ${{ job.status }}
+        author_name: Deploy Results
+        fields: repo, message, author, action, job, took, ref, workflow
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()
